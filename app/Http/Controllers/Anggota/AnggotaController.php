@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Anggota;
 
 use App\Http\Controllers\Controller;
 
-class DashboardController extends Controller
+class AnggotaController extends Controller
 {
     public function index(){
-        return view('page.anggota.dashboard.index');
+        return view('page.anggota.anggota.index');
     }
 }

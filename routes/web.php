@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Anggota\AnggotaController;
+use App\Http\Controllers\Anggota\BukuAnggotaController;
+use App\Http\Controllers\Anggota\DashboardController;
 use App\Http\Controllers\KepalaPerpus\BukuController;
 use App\Http\Controllers\KepalaPerpus\DashboardKepalaPerpusController;
 use App\Http\Controllers\KepalaPerpus\PetugasController;
@@ -8,19 +11,18 @@ use App\Http\Controllers\Petugas\BukuPetugasController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 use Illuminate\Support\Facades\Route;
 
-//dashboard
-Route::prefix('kepalaperpus')->group(function () {
-    Route::resource('dashboard', DashboardKepalaPerpusController::class);
+//ANGGOTA
+Route::prefix('perpustakaandigital')->name('anggota.')->group(function () {
+    Route::resource('buku', BukuAnggotaController::class);
+    Route::resource('profile', AnggotaController::class);
+    Route::resource('dashboard', DashboardController::class);
 });
 
-//buku
-Route::prefix('kepalaperpus')->group(function () {
-    Route::resource('books', BukuController::class);
-});
-
-//petugas
+//KEPALA PERPUSTAKAAN
 Route::prefix('kepalaperpus')->group(function () {
     Route::resource('petugas', PetugasController::class);
+    Route::resource('dashboard', DashboardKepalaPerpusController::class);
+    Route::resource('books', BukuController::class);
 });
 
 

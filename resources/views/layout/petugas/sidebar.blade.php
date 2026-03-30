@@ -11,7 +11,7 @@
         <!-- Menu -->
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route('petugas.dashboard.index') }}">
                     <span class="menu-title">Dashboard</span>
                 </a>
             </li>
