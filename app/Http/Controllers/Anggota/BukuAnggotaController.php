@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Http\Controllers\Anggota;
+
+use App\Http\Controllers\Controller;
+use App\Models\Book;
+
+class BukuAnggotaController extends Controller
+{
+    public function index(){
+        // Ambil data About yang aktif
+        $activeBuku = Book::where('is_active', 'active')->get();
+
+        // Kirim ke view
+        return view('page.anggota.buku.index', compact('activeBuku'));
+    }
+    public function show($id){
+        //cari ke tabel kelas di database sesuai atau berdasarkan id kelas ada atau tidak
+        $databuku = Book::find($id);
+
+        //cek apakah datanya ada atau tidak
+        if($databuku == null){
+            return redirect()->route('buku.index');
+        }
+
+        //kembalikan kelas ke halaman show dan kembalikan data user yang di ambil
+
+        return view('page.anggota.buku.show', compact('databuku'));
+    }
+}

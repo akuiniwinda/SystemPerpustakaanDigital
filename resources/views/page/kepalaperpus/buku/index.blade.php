@@ -12,7 +12,7 @@
                       <thead>
                         <tr>
                           <th>Gambar</th>
-                          <th>Judul.</th>
+                          <th>Judul</th>
                           <th>Penulis</th>
                           <th>Tahun Terbit</th>
                           <th>Active</th>
@@ -25,8 +25,13 @@
                             <td><img src="{{ asset('storage/'.$buku->foto) }}" style="width:50px;height:75px;object-fit:cover;border-radius:0;"></td>
                             <td>{{$buku->judul}}</td>
                             <td>{{$buku->penulis}}</td>
-                            <td>aktif</td>
                             <td>{{$buku->tahun_terbit}}</td>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" class="toggle-status">
+                                             <span class="slider round"></span>
+                                </label></td>
+                            </td>
                             <td>
                                 <div>
                                     <a href="{{ route('books.edit', $buku->id) }}">Edit</a>

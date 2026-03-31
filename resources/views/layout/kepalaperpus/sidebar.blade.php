@@ -3,7 +3,7 @@
     <div class="profile-card">
         <img src="{{ asset('assets/images/Jisoo.jpg') }}" class="profile-img">
 
-        <div class="role">Anggota</div>
+        <div class="role">Kepala Perpustakaan</div>
 
         <h3 class="name">Kim Jennie</h3>
     </div>

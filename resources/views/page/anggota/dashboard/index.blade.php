@@ -1,4 +1,4 @@
-@extends('layout.petugas.app')
+@extends('layout.anggota.app')
 @section('content')
 <div class="col-md-8 grid-margin transparent">
               <div class="row">

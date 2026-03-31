@@ -15,7 +15,7 @@ class AnggotaPetugasController extends Controller
     }
 
     public function create(){
-    return view('page.anggota.auth.register');
+    return view('page.auth.register');
     }
 
     public function store(Request $request){
@@ -47,6 +47,6 @@ class AnggotaPetugasController extends Controller
 
         Anggota::create($dataanggota_store);
 
-        return redirect()->back()->with('success', 'Registrasi berhasil, silakan login!');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login!');
     }
 }
