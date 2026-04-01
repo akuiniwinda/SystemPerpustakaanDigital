@@ -10,6 +10,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Petugas\AnggotaPetugasController;
 use App\Http\Controllers\Petugas\BukuPetugasController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
+use App\Http\Controllers\Petugas\PinjamPetugasController;
+use App\Http\Controllers\PinjamController;
 use Illuminate\Support\Facades\Route;
 
 //ANGGOTA
@@ -20,6 +22,9 @@ Route::prefix('perpustakaandigital')
     Route::resource('dashboard', DashboardController::class);
     Route::resource('buku', BukuAnggotaController::class);
     Route::resource('profile', AnggotaController::class);
+    // PINJAM
+    Route::get('/pinjam/{id}', [PinjamController::class, 'create'])->name('pinjam.create');
+    Route::post('/pinjam/{id}', [PinjamController::class, 'store'])->name('pinjam');
 
 });
 
@@ -37,7 +42,9 @@ Route::prefix('petugas')->name('petugas.')->group(function () {
     Route::resource('anggota', AnggotaPetugasController::class);
     Route::resource('buku', BukuPetugasController::class);
     Route::resource('dashboard', DashboardPetugasController::class);
+    Route::resource('pinjam', PinjamPetugasController::class);
 });
+
 
 //*register */
 Route::get('/register', [AnggotaPetugasController::class, 'create'])->name('register');

@@ -16,15 +16,13 @@ class BukuAnggotaController extends Controller
     }
     public function show($id){
         //cari ke tabel kelas di database sesuai atau berdasarkan id kelas ada atau tidak
-        $databuku = Book::find($id);
+        $buku = Book::find($id);
 
         //cek apakah datanya ada atau tidak
-        if($databuku == null){
-            return redirect()->route('buku.index');
-        }
+        return redirect()->route('anggota.buku.index');
 
         //kembalikan kelas ke halaman show dan kembalikan data user yang di ambil
 
-        return view('page.anggota.buku.show', compact('databuku'));
+        return view('page.anggota.buku.show', compact('buku'));
     }
 }

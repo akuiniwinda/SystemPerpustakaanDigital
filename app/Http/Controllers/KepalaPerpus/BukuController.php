@@ -59,4 +59,18 @@ class BukuController extends Controller
 
         return redirect()->route('books.index')->with('success', 'Data buku berhasil dihapuskan');
     }
+
+    public function show($id){
+        //cari ke tabel kelas di database sesuai atau berdasarkan id kelas ada atau tidak
+        $databuku = Book::find($id);
+
+        //cek apakah datanya ada atau tidak
+        if($databuku == null){
+            return redirect()->route('buku.index');
+        }
+
+        //kembalikan kelas ke halaman show dan kembalikan data buku yang di ambil
+
+        return view('page.kepalaperpus.buku.show', compact('databuku'));
+    }
 }

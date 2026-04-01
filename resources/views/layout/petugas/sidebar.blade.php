@@ -23,13 +23,13 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route('petugas.buku.index') }}">
                     <span class="menu-title">Data Buku</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('petugas.pinjam.index') }}">
                     <span class="menu-title">Pinjam</span>
                 </a>
             </li>
