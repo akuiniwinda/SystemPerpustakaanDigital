@@ -23,17 +23,20 @@
 
                 <!-- JUDUL -->
                 <div class="mt-2">
-                    <h6 class="mb-1">{{ $buku->judul }}</h6>
-                    <small class="text-muted">{{ $buku->penulis }}</small>
+                    <h6 class="mb-1 text-truncate" style="max-width:100%;">
+                        <a href="{{ route('anggota.buku.show', $buku->id) }}">
+                            {{ $buku->judul }}
+                        </a>
+                    </h6>
+                    <small class="text-muted text-truncate d-block">{{ $buku->penulis }}</small>
                 </div>
 
                 <!-- BUTTON -->
                 <div class="mt-2">
-                    <a href="#" class="btn btn-warning btn-sm text-white">
-                        Pinjam
-                    </a>
+                        <a href="{{ route('anggota.pinjam.create', $buku->id) }}" class="btn btn-warning btn-sm text-white">
+                            Pinjam
+                        </a>
                 </div>
-
             </div>
         </div>
         @endforeach

@@ -7,7 +7,15 @@
       <p class="card-description">
         Tambah Data Buku
       </p>
-
+      @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </ul>
+        </div>
+        @endif
       <form class="forms-sample" action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
@@ -33,6 +41,22 @@
         <div class="form-group">
           <label>Foto</label>
           <input type="file" name="foto" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label>Status Aktif</label>
+            <select name="is_active" class="form-control">
+                <option value="active">Active</option>
+                <option value="nonactive">Non Active</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Status Buku</label>
+            <select name="status" class="form-control">
+                <option value="tersedia">Tersedia</option>
+                <option value="dipinjam">Dipinjam</option>
+            </select>
         </div>
 
         <button type="submit" class="btn btn-primary mr-2">Submit</button>
