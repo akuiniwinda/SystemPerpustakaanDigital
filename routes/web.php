@@ -3,6 +3,7 @@
 use App\Http\Controllers\Anggota\AnggotaController;
 use App\Http\Controllers\Anggota\BukuAnggotaController;
 use App\Http\Controllers\Anggota\DashboardController;
+use App\Http\Controllers\Anggota\RiwayatAnggotaController;
 use App\Http\Controllers\KepalaPerpus\BukuController;
 use App\Http\Controllers\KepalaPerpus\DashboardKepalaPerpusController;
 use App\Http\Controllers\KepalaPerpus\PetugasController;
@@ -22,14 +23,18 @@ Route::prefix('perpustakaandigital')
     Route::resource('dashboard', DashboardController::class);
     Route::resource('buku', BukuAnggotaController::class);
     Route::resource('profile', AnggotaController::class);
+    Route::resource('riwayat', RiwayatAnggotaController::class);
     // PINJAM
     Route::get('/pinjam/{id}', [PinjamController::class, 'create'])->name('pinjam.create');
     Route::post('/pinjam/{id}', [PinjamController::class, 'store'])->name('pinjam');
+    Route::post('/kembalikan/{id}', [PinjamController::class, 'kembalikan'])->name('anggota.kembalikan');
 
 });
 
 //KEPALA PERPUSTAKAAN
-Route::prefix('kepalaperpus')->group(function () {
+Route::prefix('kepalaperpus')
+    ->middleware('cekRole:kepalaperpus')
+    ->group(function () {
     Route::resource('petugas', PetugasController::class);
     Route::resource('dashboard', DashboardKepalaPerpusController::class);
     Route::resource('books', BukuController::class);
@@ -38,7 +43,10 @@ Route::prefix('kepalaperpus')->group(function () {
 
 
 //PETUGAS
-Route::prefix('petugas')->name('petugas.')->group(function () {
+Route::prefix('petugas')
+    ->name('petugas.')
+    ->middleware('cekRole:petugas')
+    ->group(function () {
     Route::resource('anggota', AnggotaPetugasController::class);
     Route::resource('buku', BukuPetugasController::class);
     Route::resource('dashboard', DashboardPetugasController::class);

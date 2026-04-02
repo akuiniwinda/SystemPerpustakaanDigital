@@ -41,7 +41,7 @@ class PinjamController extends Controller
             'book_id' => $book_id,
             'tanggal_pinjam' => $tanggal_pinjam,
             'tanggal_pengembalian' => $tanggal_pengembalian,
-            'status' => 'konfirmasi'
+            'status' => 'pengajuan'
         ]);
 
         // UPDATE STATUS BUKU
@@ -51,6 +51,21 @@ class PinjamController extends Controller
 
         return redirect()->route('anggota.buku.index')
             ->with('success', 'Buku berhasil dipinjam!');
+    }
+
+    public function kembalikan($id){
+        $pinjam = Pinjam::findOrFail($id);
+
+        // ubah status pinjam
+        $pinjam->update([
+            'status' => 'selesai'
+        ]);
+
+        // ubah status buku jadi tersedia lagi
+        \App\Models\Book::where('id', $pinjam->book_id)
+            ->update(['status' => 'tersedia']);
+
+        return back()->with('success', 'Buku berhasil dikembalikan!');
     }
 
 }

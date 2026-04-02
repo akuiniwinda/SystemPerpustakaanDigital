@@ -51,7 +51,7 @@
                             <!-- OPSI -->
                             <td>
                                 <div>
-                                    <a href="">Show</a>
+                                    <a href="{{ route('petugas.pinjam.show', $pinjam->id) }}">Show</a>
                                 </div>
                             </td>
                         </tr>

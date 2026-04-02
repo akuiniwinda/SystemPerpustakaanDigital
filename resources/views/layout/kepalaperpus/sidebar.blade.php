@@ -1,11 +1,15 @@
+@if(session('login') && session('role') == 'kepalaperpus')
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    @php
+        $user = session('user');
+    @endphp
     <!-- Profile -->
     <div class="profile-card">
-        <img src="{{ asset('assets/images/Jisoo.jpg') }}" class="profile-img">
+        <img src="{{ $user->foto ? asset('storage/'.$user->foto) : asset('assets/images/default.png') }}" class="profile-img">
 
         <div class="role">Kepala Perpustakaan</div>
 
-        <h3 class="name">Kim Jennie</h3>
+        <h3 class="name">{{ $user->name }}</h3>
     </div>
 
         <!-- Menu -->
@@ -35,3 +39,4 @@
             </li>
         </ul>
       </nav>
+@endif
