@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Anggota;
 use App\Models\Petugas;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -37,6 +38,15 @@ class LoginController extends Controller
             Session::put('user', $petugas);
 
             return redirect('/petugas/dashboard');
+        }
+
+        // CEK KE KEPALA PERPUS (Seeder)
+        $kepalaperpus = User::where('email', $request->email)->first();
+        if ($kepalaperpus && Hash::check($request->password, $kepalaperpus->password)) {
+            Session::put('login', true);
+            Session::put('role', $kepalaperpus->role);
+            Session::put('user', $kepalaperpus);
+            return redirect('/kepalaperpus/dashboard'); // ganti sesuai route kepala
         }
 
         return back()->with('error', 'Email atau password salah');

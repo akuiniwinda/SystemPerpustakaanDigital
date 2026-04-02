@@ -36,8 +36,8 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span class="menu-title">Denda</span>
+            <a class="nav-link" href="{{ route('anggota.riwayat.index') }}">
+                <span class="menu-title">Riwayat</span>
             </a>
         </li>
     </ul>
