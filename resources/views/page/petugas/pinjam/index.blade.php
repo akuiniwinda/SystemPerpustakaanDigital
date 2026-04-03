@@ -46,7 +46,18 @@
                             </td>
 
                             <!-- JUDUL BUKU -->
-                            <td>{{ $pinjam->status }}</td>
+                            <td>
+                                <span class="badge border
+                                    @if($pinjam->status == 'ditolak') border-danger text-danger
+                                    @elseif($pinjam->status == 'pengajuan') border-warning text-warning
+                                    @elseif($pinjam->status == 'meminjam') border-info text-info
+                                    @elseif($pinjam->status == 'selesai') border-success text-success
+                                    @else border-secondary text-secondary
+                                    @endif
+                                ">
+                                    {{ ucfirst($pinjam->status) }}
+                                </span>
+                            </td>
 
                             <!-- OPSI -->
                             <td>
