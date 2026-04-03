@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('penulis');
             $table->year('tahun_terbit');
             $table->text('deskripsi');
+            $table->enum('status', ['tersedia', 'dipinjam'])->default('tersedia');
             $table->enum('is_active', ['active','nonactive'])->default('active');
             $table->timestamps();
         });

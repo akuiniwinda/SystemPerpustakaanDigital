@@ -47,6 +47,7 @@ class AnggotaPetugasController extends Controller
 
         Anggota::create($dataanggota_store);
 
+
         return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login!');
     }
 }

@@ -27,7 +27,14 @@
           <div class="col-lg-6 mx-auto">
             <div class="auth-form-light text-left py-5 px-4 px-sm-5">
               <h4>Buat Akun?</h4>
-              <form class="pt-3" method="POST" action="{{ route('petugas.anggota.store') }}" enctype="multipart/form-data">
+              @if ($errors->any())
+<div class="alert alert-danger">
+    @foreach ($errors->all() as $error)
+        <p>{{ $error }}</p>
+    @endforeach
+</div>
+@endif
+              <form class="pt-3" method="POST" action="{{ route('register.store') }}" enctype="multipart/form-data">
                 @csrf
                 <h4 class="text-center mb-4">Perpustakaan Digital</h4>
 

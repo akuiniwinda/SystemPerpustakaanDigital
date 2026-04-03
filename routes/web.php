@@ -27,7 +27,7 @@ Route::prefix('perpustakaandigital')
     // PINJAM
     Route::get('/pinjam/{id}', [PinjamController::class, 'create'])->name('pinjam.create');
     Route::post('/pinjam/{id}', [PinjamController::class, 'store'])->name('pinjam');
-    Route::post('/kembalikan/{id}', [PinjamController::class, 'kembalikan'])->name('anggota.kembalikan');
+    Route::post('/kembalikan/{id}', [PinjamController::class, 'kembalikan'])->name('kembalikan');
 
 });
 
@@ -51,6 +51,7 @@ Route::prefix('petugas')
     Route::resource('buku', BukuPetugasController::class);
     Route::resource('dashboard', DashboardPetugasController::class);
     Route::resource('pinjam', PinjamPetugasController::class);
+    Route::post('/konfirmasi/{id}', [PinjamPetugasController::class, 'konfirmasi'])->name('konfirmasi');
 });
 
 

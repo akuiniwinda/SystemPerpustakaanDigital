@@ -15,7 +15,7 @@
         </div>
       @endif
 
-      <form >
+      <form action="{{ route('petugas.konfirmasi', $datapinjam->id) }}" method="POST">
         @csrf
 
         <!-- NAMA -->
@@ -45,11 +45,12 @@
             <h6>{{$databuku->judul}}</h6>
         </div>
 
-        <!-- BUTTON -->
-        <button type="submit" name="status" value="konfirmasi" class="btn btn-success mr-2">
+        <!-- KONFIRMASI -->
+        <button type="submit" name="aksi" value="konfirmasi" class="btn btn-success mr-2">
             Konfirmasi
         </button>
 
+        <!-- TOLAK -->
         <button type="submit" name="aksi" value="tolak" class="btn btn-danger">
             Tolak
         </button>
