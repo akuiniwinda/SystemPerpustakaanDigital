@@ -1,10 +1,10 @@
 @extends('layout.petugas.app')
 @section('content')
-<div class="col-lg-10 grid-margin stretch-card">
+<div class="col-lg-15 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Tabel Buku</h4>
-                  <div class="table-responsive">
+                  <div >
                     <table class="table">
                       <thead>
                         <tr>
@@ -13,6 +13,7 @@
                           <th>Judul Buku</th>
                           <th>Tanggal Pinjam</th>
                           <th>Tanggal Pengembalian</th>
+                          <th>Denda</th>
                           <th>Status</th>
                           <th>Opsi</th>
                         </tr>
@@ -45,7 +46,18 @@
                                 @endif
                             </td>
 
-                            <!-- JUDUL BUKU -->
+                            <!-- DENDA -->
+                            <td>
+                                @if ($pinjam->denda > 0)
+                                    <span class="text-danger">
+                                        Rp {{ number_format($pinjam->denda) }}
+                                    </span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+
+                            <!-- STATUS BUKU -->
                             <td>
                                 <span class="badge border
                                     @if($pinjam->status == 'ditolak') border-danger text-danger

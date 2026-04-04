@@ -17,12 +17,12 @@ class PinjamController extends Controller
     public function store($book_id){
         $user = session('user');
 
-        // CEK LOGIN
+        //cek user yang login
         if (!$user) {
             return redirect()->route('login')->with('error', 'Harus login dulu!');
         }
 
-        // CEK BUKU SUDAH DIPINJAM
+        //cek buku sudah dipinjam atau belum
         $cek = Pinjam::where('book_id', $book_id)
                     ->where('status', '!=', 'selesai')
                     ->first();
@@ -31,11 +31,11 @@ class PinjamController extends Controller
             return back()->with('error', 'Buku sedang dipinjam!');
         }
 
-        // TANGGAL OTOMATIS
+        //tanggal biar otomatis saat pinjam
         $tanggal_pinjam = Carbon::now();
-        $tanggal_pengembalian = Carbon::now()->addDays(30);
+        $tanggal_pengembalian = Carbon::now()->addDays(1);
 
-        // SIMPAN
+        //simpat pinjaman ke table pinjam
         Pinjam::create([
             'anggota_id' => $user->id,
             'book_id' => $book_id,
@@ -56,16 +56,29 @@ class PinjamController extends Controller
     public function kembalikan($id){
         $pinjam = Pinjam::findOrFail($id);
 
-        // ubah status pinjam
+        $today = \Carbon\Carbon::now();
+        $batas = \Carbon\Carbon::parse($pinjam->tanggal_pengembalian);
+
+        $denda = 0;
+
+        // cek telat
+        if ($today->gt($batas)) {
+            $hari_telat = $today->diffInDays($batas);
+            $denda = $hari_telat * 5000;
+        }
+
+        // update pinjam
         $pinjam->update([
-            'status' => 'selesai'
+            'status' => 'selesai',
+            'tanggal_kembali' => $today,
+            'denda' => $denda
         ]);
 
-        // ubah status buku jadi tersedia lagi
+        // update buku
         \App\Models\Book::where('id', $pinjam->book_id)
             ->update(['status' => 'tersedia']);
 
-        return back()->with('success', 'Buku berhasil dikembalikan!');
+        return back()->with('success', 'Buku dikembalikan. Denda: Rp ' . $denda);
     }
 
 }

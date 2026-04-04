@@ -21,26 +21,41 @@
         <div class="form-group">
           <label>Judul</label>
           <input type="text" name="judul" class="form-control" placeholder="Masukkan judul buku">
+            @error('judul')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
           <label>Penulis</label>
           <input type="text" name="penulis" class="form-control" placeholder="Masukkan nama penulis">
+            @error('penulis')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
           <label>Tahun Terbit</label>
           <input type="number" name="tahun_terbit" class="form-control" placeholder="Contoh: 2024">
+            @error('tahun_terbit')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
           <label>Deskripsi</label>
           <textarea name="deskripsi" class="form-control" rows="4" placeholder="Masukkan deskripsi buku"></textarea>
+            @error('deskripsi')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
           <label>Foto</label>
           <input type="file" name="foto" class="form-control">
+            @error('foto')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">

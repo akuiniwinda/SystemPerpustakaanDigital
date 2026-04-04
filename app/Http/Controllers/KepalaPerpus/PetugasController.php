@@ -49,15 +49,18 @@ class PetugasController extends Controller
         return redirect()->route('petugas.index')->with('success', 'Data petugas berhasil ditambahkan');
     }
 
-    public function destroy(){
-        $datapetugas = Petugas::find();
+    public function destroy($id){
+        $hpusdatapetugas = Petugas::find($id);
 
-        if ($datapetugas != null){
-            Storage::disk('public')->delete($datapetugas->photo_profile);
-            $datapetugas->delete();
+        if ($hpusdatapetugas != null){
+            if ($hpusdatapetugas->foto) {
+                Storage::disk('public')->delete($hpusdatapetugas->foto);
+            }
+
+            $hpusdatapetugas->delete();
         }
 
-        return redirect()->route('petugas.index');
+        return redirect()->route('petugas.index')->with('success', 'Data berhasil dihapus');
     }
 
     public function show($id){
@@ -72,6 +75,65 @@ class PetugasController extends Controller
         //kembalikan kelas ke halaman show dan kembalikan data user yang di ambil
 
         return view('page.kepalaperpus.petugas.show', compact('datapetugas'));
+    }
+
+        public function edit($id){
+        //siapkan data
+        $petugas = Petugas::all();
+
+        //amabil data petugas di tabel petugas berdasar kan id
+        $Petugases = Petugas::find($id);
+
+        //cek apakah datanya ada atau tidak
+        if($Petugases == null){
+            return redirect()->route('petugas.index');
+        }
+
+        return view('page.kepalaperpus.petugas.edit', compact('petugas', 'Petugases'));
+
+    }
+
+    public function update(Request $request, $id){
+        //validasi data
+        $request->validate([
+            'foto'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'nama'   => 'required|string|max:255',
+            'email'  => 'required|email|unique:petugases,email,' . $id,
+            'nip'    => 'required|string|max:50|unique:petugases,nip,' . $id,
+            'alamat' => 'required|string',
+            'password' => 'nullable|string|min:4',
+        ]);
+
+        //cari apakah ada user di tabel yang akan di update cari berdasarkan id
+        $datapetugas = Petugas::find($id);
+
+        //siapkan data yang akan disiampan sebagai update
+        $datapetugas_update = [
+            'nama'   => $request->nama,
+            'email'  => $request->email,
+            'nip'    => $request->nip,
+            'alamat' => $request->alamat,
+        ];
+
+        //password hanya diupdate kalau diisi
+        if ($request->password) {
+            $datapetugas_update['password'] = Hash::make($request->password);
+        }
+
+        //foto hanya diupdate kalau diisi
+        if ($request->hasFile('photo')){
+            //hapus file gambar sebelumnya
+            Storage::disk('public')->delete($datapetugas->photo);
+
+            //upload gambar
+            $datapetugas_update['photo'] = $request->file('photo')->store('imgpetugas', 'public');
+        }
+
+        //simpan data ke dalam base dengan data yang terbaru sesuai update
+        $datapetugas->update($datapetugas_update);
+
+        //simpan data ke halaman beranda
+        return redirect()->route('petugas.index');
     }
 
 }
