@@ -73,4 +73,58 @@ class BukuController extends Controller
 
         return view('page.kepalaperpus.buku.show', compact('databuku'));
     }
+
+    public function edit($id){
+        //siapkan data
+        $book = Book::all();
+
+        //amabil data petugas di tabel petugas berdasar kan id
+        $books = Book::find($id);
+
+        //cek apakah datanya ada atau tidak
+        if($books == null){
+            return redirect()->route('buku.index');
+        }
+
+        return view('page.kepalaperpus.buku.edit', compact('book', 'books'));
+
+    }
+
+    public function update(Request $request, $id){
+        //validasi data
+        $request->validate([
+            'foto'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'judul'          => 'required|string|max:255',
+            'penulis'        => 'required|string|max:255',
+            'tahun_terbit'   => 'required|digits:4|integer',
+            'deskripsi'      => 'required|string',
+        ]);
+
+        //cari apakah ada user di tabel yang akan di update cari berdasarkan id
+        $databuku = Book::find($id);
+
+        //siapkan data yang akan disiampan sebagai update
+        $databuku_update = [
+            'judul'          => $request->judul,
+            'penulis'        => $request->penulis,
+            'tahun_terbit'   => $request->tahun_terbit,
+            'deskripsi'      => $request->deskripsi,
+        ];
+
+
+        //foto hanya diupdate kalau diisi
+        if ($request->hasFile('photo')){
+            //hapus file gambar sebelumnya
+            Storage::disk('public')->delete($databuku->photo);
+
+            //upload gambar
+            $databuku_update['photo'] = $request->file('photo')->store('imgbuku', 'public');
+        }
+
+        //simpan data ke dalam base dengan data yang terbaru sesuai update
+        $databuku->update($databuku_update);
+
+        //simpan data ke halaman beranda
+         return redirect()->route('books.index')->with('success', 'Data buku berhasil diedit');
+    }
 }

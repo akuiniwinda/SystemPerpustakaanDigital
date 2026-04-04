@@ -18,7 +18,7 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        //CEK KE ANGGOTA
+        //cek punya anggota ada apa engganya ditabel anggota
         $anggota = Anggota::where('email', $request->email)->first();
 
         if ($anggota && Hash::check($request->password, $anggota->password)) {
@@ -29,7 +29,7 @@ class LoginController extends Controller
             return redirect()->route('anggota.dashboard.index');
         }
 
-        //CEK KE PETUGAS
+        //cek punya petugas ada apa engganya ditabel Petugas
         $petugas = Petugas::where('email', $request->email)->first();
 
         if ($petugas && Hash::check($request->password, $petugas->password)) {
@@ -40,13 +40,13 @@ class LoginController extends Controller
             return redirect('/petugas/dashboard');
         }
 
-        // CEK KE KEPALA PERPUS (Seeder)
+        //cek punya kepala perpus ada apa engganya ditabel user (pake seeder)
         $kepalaperpus = User::where('email', $request->email)->first();
         if ($kepalaperpus && Hash::check($request->password, $kepalaperpus->password)) {
             Session::put('login', true);
             Session::put('role', $kepalaperpus->role);
             Session::put('user', $kepalaperpus);
-            return redirect('/kepalaperpus/dashboard'); // ganti sesuai route kepala
+            return redirect('/kepalaperpus/dashboard');
         }
 
         return back()->with('error', 'Email atau password salah');

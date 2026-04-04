@@ -31,10 +31,16 @@
 
                 <div class="form-group">
                   <input type="email" name="email" class="form-control form-control-lg" placeholder="Email">
+                  @error('email')
+                        <small style="color:red">{{$message}}</small>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                   <input type="password" name="password" class="form-control form-control-lg" placeholder="Password">
+                    @error('password')
+                        <small style="color:red">{{$message}}</small>
+                    @enderror
                 </div>
 
                 <div class="mt-3">

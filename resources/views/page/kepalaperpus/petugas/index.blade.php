@@ -29,7 +29,7 @@
                                 <div>
                                     <a href="{{ route('petugas.edit', $petugas->id) }}">Edit</a>
                                     <a href="{{ route('petugas.show', $petugas->id) }}">Show</a>
-                                    <a href="{{ route('petugas.destroy', $petugas->id) }}">Delete</a>
+                                    <a href="{{ route('petugas.delete', $petugas->id) }}">Delete</a>
                                 </div>
                             </td>
                         </tr>

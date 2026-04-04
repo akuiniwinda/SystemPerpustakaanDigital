@@ -45,15 +45,20 @@
             <h6>{{$databuku->judul}}</h6>
         </div>
 
-        <!-- KONFIRMASI -->
-        <button type="submit" name="aksi" value="konfirmasi" class="btn btn-success mr-2">
-            Konfirmasi
-        </button>
+        @if($databuku->status == 'pending')
+            <!-- KONFIRMASI -->
+            <button type="submit" name="aksi" value="konfirmasi" class="btn btn-success mr-2">
+                Konfirmasi
+            </button>
 
-        <!-- TOLAK -->
-        <button type="submit" name="aksi" value="tolak" class="btn btn-danger">
-            Tolak
-        </button>
+            <!-- TOLAK -->
+            <button type="submit" name="aksi" value="tolak" class="btn btn-danger">
+                Tolak
+            </button>
+        @else
+            <!-- CANCEL -->
+            <a href="{{ route('petugas.pinjam.index') }}" class="btn btn-light">Cancel</a>
+        @endif
       </form>
 
     </div>

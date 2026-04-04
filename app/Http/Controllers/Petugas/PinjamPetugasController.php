@@ -42,14 +42,14 @@ class PinjamPetugasController extends Controller
             Book::where('id', $pinjam->book_id)
                 ->update(['status' => 'dipinjam']);
 
-            return redirect()->route('petugas.pinjam.show', $id)
+            return redirect()->route('pinjam.index')
                 ->with('success', 'Pinjaman dikonfirmasi!');
 
         } elseif ($request->aksi == 'tolak') {
 
             $pinjam->update(['status' => 'ditolak']);
 
-            return redirect()->route('petugas.pinjam.show', $id)
+            return redirect()->route('pinjam.index')
                 ->with('error', 'Pinjaman ditolak!');
         }
     }

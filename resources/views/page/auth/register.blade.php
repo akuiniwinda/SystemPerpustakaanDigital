@@ -44,16 +44,25 @@
 
                 <div class="form-group">
                     <input type="email" name="email" class="form-control form-control-lg" placeholder="Email">
+                    @error('email')
+                        <small style="color:red">{{$message}}</small>
+                    @enderror
                 </div>
 
                 <!-- 2 kolom -->
                 <div class="form-row">
                     <div class="form-group col-md-6">
                     <input type="text" name="nomor_induk" class="form-control form-control-lg" placeholder="Nomor Induk">
+                    @error('nomor_induk')
+                        <small style="color:red">{{$message}}</small>
+                    @enderror
                     </div>
 
                     <div class="form-group col-md-6">
                     <input type="text" name="no_telp" class="form-control form-control-lg" placeholder="Nomor Telepon">
+                    @error('no_telp')
+                        <small style="color:red">{{$message}}</small>
+                    @enderror
                     </div>
                 </div>
 

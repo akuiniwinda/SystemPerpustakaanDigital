@@ -28,13 +28,14 @@ Route::prefix('perpustakaandigital')
     Route::get('/pinjam/{id}', [PinjamController::class, 'create'])->name('pinjam.create');
     Route::post('/pinjam/{id}', [PinjamController::class, 'store'])->name('pinjam');
     Route::post('/kembalikan/{id}', [PinjamController::class, 'kembalikan'])->name('kembalikan');
-
 });
 
 //KEPALA PERPUSTAKAAN
 Route::prefix('kepalaperpus')
     ->middleware('cekRole:kepalaperpus')
     ->group(function () {
+    Route::get('books/hapus/{id}', [BukuController::class, 'destroy'])->name('books.delete');
+    Route::get('petugas/hapus/{id}', [PetugasController::class, 'destroy'])->name('petugas.delete');
     Route::resource('petugas', PetugasController::class);
     Route::resource('dashboard', DashboardKepalaPerpusController::class);
     Route::resource('books', BukuController::class);

@@ -6,7 +6,7 @@
                   <div class="card card-tale">
                     <div class="card-body">
                       <p class="mb-4">Total Buku</p>
-                      <p class="fs-30 mb-2">4006</p>
+                      <p class="fs-30 mb-2">{{ $totalBuku }}</p>
                     </div>
                   </div>
                 </div>
@@ -14,7 +14,7 @@
                   <div class="card card-dark-blue">
                     <div class="card-body">
                       <p class="mb-4">Total Anggota</p>
-                      <p class="fs-30 mb-2">61344</p>
+                      <p class="fs-30 mb-2">{{ $totalAnggota }}</p>
                     </div>
                   </div>
                 </div>
@@ -24,7 +24,7 @@
                   <div class="card card-light-blue">
                     <div class="card-body">
                       <p class="mb-4">Total Pinjam</p>
-                      <p class="fs-30 mb-2">34040</p>
+                      <p class="fs-30 mb-2">{{ $totalPinjam }}</p>
                     </div>
                   </div>
                 </div>

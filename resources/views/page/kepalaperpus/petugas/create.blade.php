@@ -19,16 +19,25 @@
         <div class="form-group">
             <label>Nama</label>
             <input type="text" name="nama" class="form-control" placeholder="Masukkan nama">
+            @error('nama')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
             <label>NIP</label>
             <input type="text" name="nip" class="form-control" placeholder="Masukkan NIP">
+            @error('nip')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
             <label>Email</label>
             <input type="email" name="email" class="form-control" placeholder="Masukkan email">
+            @error('email')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
@@ -39,11 +48,17 @@
         <div class="form-group">
             <label>Alamat</label>
             <textarea name="alamat" class="form-control" rows="4" placeholder="Masukkan alamat"></textarea>
+            @error('alamat')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <div class="form-group">
           <label>Foto</label>
           <input type="file" name="foto" class="form-control">
+            @error('foto')
+	            <small style="color:red">{{$message}}</small>
+            @enderror
         </div>
 
         <button type="submit" class="btn btn-primary mr-2">Submit</button>

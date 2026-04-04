@@ -36,7 +36,7 @@
                                 <div>
                                     <a href="{{ route('books.edit', $buku->id) }}">Edit</a>
                                     <a href="{{ route('books.show', $buku->id) }}">Show</a>
-                                    <a href="{{ route('books.destroy', $buku->id) }}">Delete</a>
+                                    <a href="{{ route('books.delete', $buku->id) }}">Delete</a>
                                 </div>
                             </td>
                         </tr>
