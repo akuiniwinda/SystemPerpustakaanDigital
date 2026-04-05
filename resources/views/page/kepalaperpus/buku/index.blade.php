@@ -28,9 +28,12 @@
                             <td>{{$buku->tahun_terbit}}</td>
                             <td>
                                 <label class="switch">
-                                    <input type="checkbox" class="toggle-status">
-                                             <span class="slider round"></span>
-                                </label></td>
+                                    <input type="checkbox"
+                                        class="toggle-status"
+                                        data-id="{{ $buku->id }}"
+                                        {{ $buku->is_active == 'active' ? 'checked' : '' }}>
+                                    <span class="slider round"></span>
+                                </label>
                             </td>
                             <td>
                                 <div>
@@ -47,4 +50,28 @@
                 </div>
               </div>
             </div>
+
+<script>
+    document.querySelectorAll('.toggle-status').forEach(function(el) {
+        el.addEventListener('change', function() {
+
+            let id = this.dataset.id;
+            let status = this.checked ? 1 : 0;
+
+            fetch(`/books/toggle/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ status: status })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            });
+
+        });
+    });
+</script>
 @endsection
