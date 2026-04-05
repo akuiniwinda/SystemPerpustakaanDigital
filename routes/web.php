@@ -5,12 +5,14 @@ use App\Http\Controllers\Anggota\BukuAnggotaController;
 use App\Http\Controllers\Anggota\DashboardController;
 use App\Http\Controllers\Anggota\RiwayatAnggotaController;
 use App\Http\Controllers\KepalaPerpus\BukuController;
+use App\Http\Controllers\KepalaPerpus\CekLaporanController;
 use App\Http\Controllers\KepalaPerpus\DashboardKepalaPerpusController;
 use App\Http\Controllers\KepalaPerpus\PetugasController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Petugas\AnggotaPetugasController;
 use App\Http\Controllers\Petugas\BukuPetugasController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
+use App\Http\Controllers\Petugas\LaporanController;
 use App\Http\Controllers\Petugas\PinjamPetugasController;
 use App\Http\Controllers\PinjamController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +41,9 @@ Route::prefix('kepalaperpus')
     Route::resource('petugas', PetugasController::class);
     Route::resource('dashboard', DashboardKepalaPerpusController::class);
     Route::resource('books', BukuController::class);
+    Route::get('/laporan', [CekLaporanController::class, 'index'])->name('laporan.index');
+    Route::post('/laporan/{id}/lihat', [CekLaporanController::class, 'lihat'])->name('laporan.lihat');
+    Route::post('/books/toggle/{id}', [BukuController::class, 'toggle'])->name('books.toggle');
 });
 
 
@@ -53,6 +58,10 @@ Route::prefix('petugas')
     Route::resource('dashboard', DashboardPetugasController::class);
     Route::resource('pinjam', PinjamPetugasController::class);
     Route::post('/konfirmasi/{id}', [PinjamPetugasController::class, 'konfirmasi'])->name('konfirmasi');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/download', [LaporanController::class, 'download'])->name('laporan.download');
+    Route::post('/laporan/upload', [LaporanController::class, 'upload'])->name('laporan.upload');
+
 });
 
 

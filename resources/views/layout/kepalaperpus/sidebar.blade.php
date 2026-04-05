@@ -33,7 +33,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('laporan.index') }}">
                 <span class="menu-title">Laporan</span>
                 </a>
             </li>

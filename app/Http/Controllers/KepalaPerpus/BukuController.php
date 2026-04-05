@@ -127,4 +127,16 @@ class BukuController extends Controller
         //simpan data ke halaman beranda
          return redirect()->route('books.index')->with('success', 'Data buku berhasil diedit');
     }
+
+    public function toggle(Request $request, $id){
+        $book = Book::findOrFail($id);
+
+        $book->is_active = $request->status == 1 ? 'active' : 'nonactive';
+        $book->save();
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $book->is_active
+        ]);
+    }
 }

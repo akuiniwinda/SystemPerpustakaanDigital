@@ -45,13 +45,12 @@
             <h6>{{$databuku->judul}}</h6>
         </div>
 
-        @if($databuku->status == 'pending')
-            <!-- KONFIRMASI -->
+        @if($datapinjam->status == 'pengajuan')
+
             <button type="submit" name="aksi" value="konfirmasi" class="btn btn-success mr-2">
                 Konfirmasi
             </button>
 
-            <!-- TOLAK -->
             <button type="submit" name="aksi" value="tolak" class="btn btn-danger">
                 Tolak
             </button>
