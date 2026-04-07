@@ -7,15 +7,6 @@
       <p class="card-description">
         Tambah Data Buku
       </p>
-      @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-            </ul>
-        </div>
-        @endif
       <form class="forms-sample" action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
@@ -59,19 +50,11 @@
         </div>
 
         <div class="form-group">
-            <label>Status Aktif</label>
-            <select name="is_active" class="form-control">
-                <option value="active">Active</option>
-                <option value="nonactive">Non Active</option>
-            </select>
-        </div>
+            <input type="number" name="stock" class="form-control" placeholder="Masukkan jumlah stock" min="0">
 
-        <div class="form-group">
-            <label>Status Buku</label>
-            <select name="status" class="form-control">
-                <option value="tersedia">Tersedia</option>
-                <option value="dipinjam">Dipinjam</option>
-            </select>
+            @error('stock')
+                <small style="color:red">{{ $message }}</small>
+            @enderror
         </div>
 
         <button type="submit" class="btn btn-primary mr-2">Submit</button>

@@ -26,20 +26,26 @@ class BukuController extends Controller
             'penulis'        => 'required|string|max:255',
             'tahun_terbit'   => 'required|digits:4|integer',
             'deskripsi'      => 'required|string',
-            'is_active'      => 'required|in:active,nonactive',
-            'status'         => 'required|in:tersedia,dipinjam'
+            'stock'          => 'required|integer|min:0'
         ]);
+
+        // tentukan status dari stock
+        if ($request->stock == 0) {
+            $status = 'habis';
+        } else {
+            $status = 'tersedia';
+        }
 
         $databuku_store = [
             'judul'          => $request->judul,
             'penulis'        => $request->penulis,
             'tahun_terbit'   => $request->tahun_terbit,
             'deskripsi'      => $request->deskripsi,
-            'is_active'      => $request->is_active,
-            'status'         => $request->status,
+            'stock'          => $request->stock,
+            'status'         => $status, // ✅ pakai hasil logic
         ];
 
-        //upload foto
+        // upload foto
         if ($request->hasFile('foto')) {
             $databuku_store['foto'] = $request->file('foto')->store('imgbuku', 'public');
         }
@@ -75,50 +81,49 @@ class BukuController extends Controller
     }
 
     public function edit($id){
-        //siapkan data
-        $book = Book::all();
+        $book = Book::findOrFail($id);
 
-        //amabil data petugas di tabel petugas berdasar kan id
-        $books = Book::find($id);
-
-        //cek apakah datanya ada atau tidak
-        if($books == null){
-            return redirect()->route('buku.index');
-        }
-
-        return view('page.kepalaperpus.buku.edit', compact('book', 'books'));
-
+        return view('page.kepalaperpus.buku.edit', compact('book'));
     }
 
     public function update(Request $request, $id){
-        //validasi data
         $request->validate([
             'foto'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'judul'          => 'required|string|max:255',
             'penulis'        => 'required|string|max:255',
             'tahun_terbit'   => 'required|digits:4|integer',
             'deskripsi'      => 'required|string',
+            'stock'          => 'required|integer|min:0'
         ]);
 
-        //cari apakah ada user di tabel yang akan di update cari berdasarkan id
-        $databuku = Book::find($id);
+        $databuku = Book::findOrFail($id);
 
-        //siapkan data yang akan disiampan sebagai update
         $databuku_update = [
-            'judul'          => $request->judul,
-            'penulis'        => $request->penulis,
-            'tahun_terbit'   => $request->tahun_terbit,
-            'deskripsi'      => $request->deskripsi,
+            'judul' => $request->judul,
+            'penulis' => $request->penulis,
+            'tahun_terbit' => $request->tahun_terbit,
+            'deskripsi' => $request->deskripsi,
+            'stock' => $request->stock
         ];
 
+        if ($request->filled('stock')) {
+
+            $databuku_update['stock'] = $request->stock;
+
+            if ($request->stock == 0) {
+                $databuku_update['status'] = 'habis';
+            } else {
+                $databuku_update['status'] = 'tersedia';
+            }
+        }
 
         //foto hanya diupdate kalau diisi
-        if ($request->hasFile('photo')){
+        if ($request->hasFile('foto')){
             //hapus file gambar sebelumnya
-            Storage::disk('public')->delete($databuku->photo);
+            Storage::disk('public')->delete($databuku->foto);
 
             //upload gambar
-            $databuku_update['photo'] = $request->file('photo')->store('imgbuku', 'public');
+            $databuku_update['foto'] = $request->file('foto')->store('imgbuku', 'public');
         }
 
         //simpan data ke dalam base dengan data yang terbaru sesuai update
@@ -128,15 +133,4 @@ class BukuController extends Controller
          return redirect()->route('books.index')->with('success', 'Data buku berhasil diedit');
     }
 
-    public function toggle(Request $request, $id){
-        $book = Book::findOrFail($id);
-
-        $book->is_active = $request->status == 1 ? 'active' : 'nonactive';
-        $book->save();
-
-        return response()->json([
-            'success' => true,
-            'is_active' => $book->is_active
-        ]);
-    }
 }

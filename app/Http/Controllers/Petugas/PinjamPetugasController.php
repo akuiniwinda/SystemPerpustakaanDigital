@@ -30,27 +30,77 @@ class PinjamPetugasController extends Controller
         return view('page.petugas.pinjam.show', compact('datapinjam', 'databuku'));
     }
 
-    public function konfirmasi(Request $request, $id){
+
+// Menangani konfirmasi/tolak dari halaman show (pakai input 'aksi')
+    public function konfirmasi(Request $request, $id)
+    {
         $pinjam = Pinjam::findOrFail($id);
+        $aksi = $request->input('aksi');
 
-        if ($request->aksi == 'konfirmasi') {
-
-            $pinjam->update([
-                'status' => 'meminjam'
-            ]);
-
-            Book::where('id', $pinjam->book_id)
-                ->update(['status' => 'dipinjam']);
-
-            return redirect()->route('petugas.pinjam.index')
-                ->with('success', 'Pinjaman dikonfirmasi!');
-
-        } elseif ($request->aksi == 'tolak') {
-
-            $pinjam->update(['status' => 'ditolak']);
-
-            return redirect()->route('petugas.pinjam.index')
-                ->with('error', 'Pinjaman ditolak!');
+        if ($aksi == 'konfirmasi') {
+            // Logika setujui peminjaman
+            if ($pinjam->status != 'pengajuan') {
+                return back()->with('error', 'Status tidak valid untuk disetujui.');
+            }
+            $buku = Book::find($pinjam->book_id);
+            if ($buku->stock <= 0) {
+                return back()->with('error', 'Stok habis, tidak bisa disetujui.');
+            }
+            $pinjam->update(['status' => 'meminjam']);
+            $buku->decrement('stock');
+            $buku->update(['status' => $buku->stock > 0 ? 'tersedia' : 'habis']);
+            return redirect()->route('petugas.pinjam.index')->with('success', 'Peminjaman disetujui.');
         }
+        elseif ($aksi == 'tolak') {
+            if ($pinjam->status != 'pengajuan') {
+                return back()->with('error', 'Status tidak valid untuk ditolak.');
+            }
+            $pinjam->update(['status' => 'ditolak']);
+            return redirect()->route('petugas.pinjam.index')->with('success', 'Peminjaman ditolak.');
+        }
+
+        return back()->with('error', 'Aksi tidak dikenal.');
+    }
+
+    // Daftar pengajuan pinjam (status = 'pengajuan' dan belum ada pengajuan kembali)
+    public function listPengajuanPinjam()
+    {
+        $pengajuan = Pinjam::with(['anggota', 'buku'])
+                    ->where('status', 'pengajuan')
+                    ->where('pengajuan_pengembalian', false)
+                    ->get();
+        return view('page.petugas.pengajuan_pinjam', compact('pengajuan'));
+    }
+
+    // Daftar pengajuan kembali (status = 'meminjam' dan pengajuan_pengembalian = true)
+    public function listPengajuanKembali()
+    {
+        $pengajuan = Pinjam::with(['anggota', 'buku'])
+                    ->where('status', 'meminjam')
+                    ->where('pengajuan_pengembalian', true)
+                    ->get();
+        return view('page.petugas.pengajuan_kembali', compact('pengajuan'));
+    }
+
+    // Petugas konfirmasi pengembalian
+    public function konfirmasiKembali($id){
+        $pinjam = Pinjam::findOrFail($id);
+        if (!$pinjam->pengajuan_pengembalian || $pinjam->status != 'meminjam') {
+            return back()->with('error', 'Tidak ada pengajuan pengembalian yang valid.');
+        }
+
+        $pinjam->update([
+            'status' => 'selesai',
+            'tanggal_kembali' => now(),
+            'denda' => $pinjam->denda_pengajuan,
+            'pengajuan_pengembalian' => false,
+        ]);
+
+        // Tambah stok buku
+        $buku = Book::find($pinjam->book_id);
+        $buku->increment('stock');
+        $buku->update(['status' => 'tersedia']);
+
+        return redirect()->route('petugas.pinjam.index')->with('success', 'Pengembalian disetujui. Denda: Rp ' . number_format($pinjam->denda_pengajuan, 0, ',', '.'));
     }
 }

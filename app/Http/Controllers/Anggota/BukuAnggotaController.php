@@ -8,12 +8,13 @@ use App\Models\Book;
 class BukuAnggotaController extends Controller
 {
     public function index(){
-        // Ambil data About yang aktif
-        $activeBuku = Book::where('is_active', 'active')->get();
+        // Ambil semua data buku
+        $bukubuku = Book::all();
 
         // Kirim ke view
-        return view('page.anggota.buku.index', compact('activeBuku'));
+        return view('page.anggota.buku.index', compact('bukubuku'));
     }
+
     public function show($id){
         //cari ke tabel kelas di database sesuai atau berdasarkan id kelas ada atau tidak
         $buku = Book::find($id);

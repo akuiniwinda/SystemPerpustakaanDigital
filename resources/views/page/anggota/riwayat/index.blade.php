@@ -31,22 +31,22 @@
 
                 <!-- BUTTON -->
                 <div class="mt-2">
-                @if ($pinjam->status == 'meminjam')
-                    <form action="{{ route('anggota.kembalikan', $pinjam->id) }}" method="POST">
-                        @csrf
-                        <button class="btn btn-danger btn-sm">
-                            Kembalikan
-                        </button>
-                    </form>
-                @elseif ($pinjam->status == 'pengajuan')
-                    <button class="btn btn-warning btn-sm" disabled>
-                        Menunggu Konfirmasi
-                    </button>
-                @else
-                    <button class="btn btn-secondary btn-sm" disabled>
-                        Sudah Dikembalikan
-                    </button>
-                @endif
+                    @if ($pinjam->status == 'meminjam' && !$pinjam->pengajuan_pengembalian)
+                        <!-- Belum ajukan kembali, tampilkan tombol Kembalikan -->
+                        <form action="{{ route('anggota.kembalikan', $pinjam->id) }}" method="POST">
+                            @csrf
+                            <button class="btn btn-danger btn-sm">Kembalikan</button>
+                        </form>
+                    @elseif ($pinjam->status == 'meminjam' && $pinjam->pengajuan_pengembalian)
+                        <!-- Sudah ajukan kembali, tunggu konfirmasi petugas -->
+                        <button class="btn btn-warning btn-sm" disabled>Menunggu Konfirmasi Pengembalian</button>
+                    @elseif ($pinjam->status == 'pengajuan')
+                        <!-- Masih menunggu konfirmasi pinjam -->
+                        <button class="btn btn-warning btn-sm" disabled>Menunggu Konfirmasi Pinjam</button>
+                    @else
+                        <!-- Selesai -->
+                        <button class="btn btn-secondary btn-sm" disabled>Sudah Dikembalikan</button>
+                    @endif
                 </div>
 
             </div>

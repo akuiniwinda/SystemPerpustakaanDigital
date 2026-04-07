@@ -29,7 +29,7 @@ Route::prefix('perpustakaandigital')
     // PINJAM
     Route::get('/pinjam/{id}', [PinjamController::class, 'create'])->name('pinjam.create');
     Route::post('/pinjam/{id}', [PinjamController::class, 'store'])->name('pinjam');
-    Route::post('/kembalikan/{id}', [PinjamController::class, 'kembalikan'])->name('kembalikan');
+    Route::post('/kembalikan/{id}', [PinjamController::class, 'ajukanKembali'])->name('kembalikan');
 });
 
 //KEPALA PERPUSTAKAAN
@@ -43,26 +43,31 @@ Route::prefix('kepalaperpus')
     Route::resource('books', BukuController::class);
     Route::get('/laporan', [CekLaporanController::class, 'index'])->name('laporan.index');
     Route::post('/laporan/{id}/lihat', [CekLaporanController::class, 'lihat'])->name('laporan.lihat');
-    Route::post('/books/toggle/{id}', [BukuController::class, 'toggle'])->name('books.toggle');
+    Route::post('/books/update-status/{id}', [BukuController::class, 'updateStatus'])->name('books.toggle');
+    Route::post('/books/{id}/tambah-stok', [BukuController::class, 'tambahStok'])->name('books.tambahStok');
 });
 
 
 
-//PETUGAS
 Route::prefix('petugas')
     ->name('petugas.')
     ->middleware('cekRole:petugas')
     ->group(function () {
-    Route::resource('anggota', AnggotaPetugasController::class);
-    Route::resource('buku', BukuPetugasController::class);
-    Route::resource('dashboard', DashboardPetugasController::class);
-    Route::resource('pinjam', PinjamPetugasController::class);
-    Route::post('/konfirmasi/{id}', [PinjamPetugasController::class, 'konfirmasi'])->name('konfirmasi');
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-    Route::get('/laporan/download', [LaporanController::class, 'download'])->name('laporan.download');
-    Route::post('/laporan/upload', [LaporanController::class, 'upload'])->name('laporan.upload');
+        Route::resource('anggota', AnggotaPetugasController::class);
+        Route::resource('buku', BukuPetugasController::class);
+        Route::resource('dashboard', DashboardPetugasController::class);
+        Route::resource('pinjam', PinjamPetugasController::class);
 
-});
+        // Konfirmasi peminjaman (dari halaman show)
+        Route::post('/konfirmasi/{id}', [PinjamPetugasController::class, 'konfirmasi'])->name('konfirmasi');
+
+        // Konfirmasi pengembalian (tambahkan ini)
+        Route::post('/kembali/{id}', [PinjamPetugasController::class, 'konfirmasiKembali'])->name('petugas.kembali');
+
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/download', [LaporanController::class, 'download'])->name('laporan.download');
+        Route::post('/laporan/upload', [LaporanController::class, 'upload'])->name('laporan.upload');
+    });
 
 
 //*register */

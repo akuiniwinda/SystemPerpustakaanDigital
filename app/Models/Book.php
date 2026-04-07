@@ -12,4 +12,16 @@ class Book extends Model
     protected $table = 'books';
     //fillable
     protected $guarded = [];
+
+    protected static function boot(){
+        parent::boot();
+
+        static::saving(function ($book) {
+            if ($book->stock == 0) {
+                $book->status = 'habis';
+            } else {
+                $book->status = 'tersedia';
+            }
+        });
+    }
 }
