@@ -45,7 +45,7 @@
         <div class="form-group">
             <label>Tanggal Pengembalian</label>
             <input type="text" class="form-control"
-                   value="{{ \Carbon\Carbon::now()->addDays(30)->format('d-m-Y') }}" readonly>
+                   value="{{ \Carbon\Carbon::now()->addDays(2)->format('d-m-Y') }}" readonly>
         </div>
 
         <!-- BUKU -->

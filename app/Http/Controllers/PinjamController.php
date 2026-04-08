@@ -36,7 +36,7 @@ class PinjamController extends Controller
             'anggota_id' => $user->id,
             'book_id' => $book_id,
             'tanggal_pinjam' => now(),
-            'tanggal_pengembalian' => now()->addDays(30),
+            'tanggal_pengembalian' => now()->addDays(2),
             'status' => 'pengajuan',
             'pengajuan_pengembalian' => false,
         ]);
@@ -54,11 +54,13 @@ class PinjamController extends Controller
             return back()->with('error', 'Pengajuan sudah ada, menunggu petugas.');
         }
 
-        $today = now();
-        $batas = \Carbon\Carbon::parse($pinjam->tanggal_pengembalian);
+        // Gunakan tanggal murni (tanpa jam)
+        $today = \Carbon\Carbon::today(); // tanggal sekarang pukul 00:00:00
+        $batas = \Carbon\Carbon::parse($pinjam->tanggal_pengembalian)->startOfDay();
+
         $denda = 0;
         if ($today->gt($batas)) {
-            $hari_telat = $today->diffInDays($batas);
+            $hari_telat = $today->diffInDays($batas); // selisih hari positif
             $denda = $hari_telat * 5000;
         }
 

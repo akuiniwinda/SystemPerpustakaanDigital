@@ -54,16 +54,16 @@
                 </td>
                 <td>
                     @if($pinjam->status == 'pengajuan')
-                        <a href="{{ route('petugas.pinjam.show', $pinjam->id) }}" class="btn btn-sm btn-primary">Proses</a>
+                        <a href="{{ route('petugas.pinjam.show', $pinjam->id) }}" class="btn btn-warning">Proses</a>
                     @else
                         <span>Sudah Konfirmasi</span>
                     @endif
                 </td>
                 <td>
                     @if($pinjam->status == 'meminjam' && $pinjam->pengajuan_pengembalian)
-                        <form action="{{ route('petugas.kembali', $pinjam->id) }}" method="POST">
+                        <form action="{{ url('/petugas/kembali/'.$pinjam->id) }}" method="POST">
                             @csrf
-                            <button class="btn btn-sm btn-success">Konfirmasi Kembali</button>
+                            <button class="btn btn-warning">Konfirmasi Kembali</button>
                         </form>
                     @else
                         <span>Revisi ini</span>

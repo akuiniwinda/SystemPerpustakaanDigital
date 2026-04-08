@@ -4,12 +4,11 @@
         $user = session('user');
     @endphp
     <!-- Profile -->
-    <div class="profile-card">
-        <img src="{{ $user->foto ? asset('storage/'.$user->foto) : asset('assets/images/default.png') }}" class="profile-img">
-
+    <div class="profile-card text-center">
+        <img src="{{ $user->foto ? asset('storage/'.$user->foto) : asset('assets/images/default.png') }}"
+            class="profile-img">
         <div class="role">Kepala Perpustakaan</div>
-
-        <h3 class="name">{{ $user->name }}</h3>
+        <h3 class="name">{{ $user->nama }}</h3>
     </div>
 
         <!-- Menu -->

@@ -2,10 +2,10 @@
     @php
         $user = session('user');
     @endphp
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="images/logo.svg" class="mr-2" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
-      </div>
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="flex-direction: column; line-height: 1.2;">
+        <a class="navbar-brand" style="font-weight: 800; font-size: 0.9rem; padding: 0; margin: 0;">PERPUSTAKAAN DIGITAL</a>
+        <a class="navbar-brand" style="font-size: 0.85rem; font-weight: 400; padding: 0; margin: 0; opacity: 0.9;">Smk Negeri 3 Banjar</a>
+    </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="icon-menu"></span>
