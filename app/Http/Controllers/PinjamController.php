@@ -14,71 +14,62 @@ class PinjamController extends Controller
         return view('page.anggota.pinjam.create', compact('buku'));
     }
 
-    public function store($book_id){
+    // Anggota mengajukan peminjaman
+    public function store($book_id) {
         $user = session('user');
+        $buku = Book::findOrFail($book_id);
 
-        //cek user yang login
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Harus login dulu!');
+        if ($buku->stock <= 0) {
+            return back()->with('error', 'Stok habis.');
         }
 
-        //cek buku sudah dipinjam atau belum
-        $cek = Pinjam::where('book_id', $book_id)
-                    ->where('status', '!=', 'selesai')
-                    ->first();
-
-        if ($cek) {
-            return back()->with('error', 'Buku sedang dipinjam!');
+        // Cek apakah sudah pernah pinjam dan belum selesai
+        $exists = Pinjam::where('anggota_id', $user->id)
+                    ->where('book_id', $book_id)
+                    ->whereNotIn('status', ['selesai'])
+                    ->exists();
+        if ($exists) {
+            return back()->with('error', 'Anda sudah meminjam buku ini.');
         }
 
-        //tanggal biar otomatis saat pinjam
-        $tanggal_pinjam = Carbon::now();
-        $tanggal_pengembalian = Carbon::now()->addDays(1);
-
-        //simpat pinjaman ke table pinjam
         Pinjam::create([
             'anggota_id' => $user->id,
             'book_id' => $book_id,
-            'tanggal_pinjam' => $tanggal_pinjam,
-            'tanggal_pengembalian' => $tanggal_pengembalian,
-            'status' => 'pengajuan'
+            'tanggal_pinjam' => now(),
+            'tanggal_pengembalian' => now()->addDays(2),
+            'status' => 'pengajuan',
+            'pengajuan_pengembalian' => false,
         ]);
 
-        // UPDATE STATUS BUKU
-        Book::where('id', $book_id)->update([
-            'status' => 'dipinjam'
-        ]);
-
-        return redirect()->route('anggota.buku.index')
-            ->with('success', 'Buku berhasil dipinjam!');
+        return redirect()->route('anggota.buku.index')->with('success', 'Pengajuan peminjaman dikirim.');
     }
 
-    public function kembalikan($id){
+    // Anggota mengajukan pengembalian
+    public function ajukanKembali($id) {
         $pinjam = Pinjam::findOrFail($id);
+        if ($pinjam->status != 'meminjam') {
+            return back()->with('error', 'Hanya bisa mengajukan untuk buku yang sedang dipinjam.');
+        }
+        if ($pinjam->pengajuan_pengembalian) {
+            return back()->with('error', 'Pengajuan sudah ada, menunggu petugas.');
+        }
 
-        $today = \Carbon\Carbon::now();
-        $batas = \Carbon\Carbon::parse($pinjam->tanggal_pengembalian);
+        // Gunakan tanggal murni (tanpa jam)
+        $today = \Carbon\Carbon::today(); // tanggal sekarang pukul 00:00:00
+        $batas = \Carbon\Carbon::parse($pinjam->tanggal_pengembalian)->startOfDay();
 
         $denda = 0;
-
-        // cek telat
         if ($today->gt($batas)) {
-            $hari_telat = $today->diffInDays($batas);
+            $hari_telat = $today->diffInDays($batas); // selisih hari positif
             $denda = $hari_telat * 5000;
         }
 
-        // update pinjam
         $pinjam->update([
-            'status' => 'selesai',
-            'tanggal_kembali' => $today,
-            'denda' => $denda
+            'pengajuan_pengembalian' => true,
+            'denda_pengajuan' => $denda,
         ]);
 
-        // update buku
-        \App\Models\Book::where('id', $pinjam->book_id)
-            ->update(['status' => 'tersedia']);
-
-        return back()->with('success', 'Buku dikembalikan. Denda: Rp ' . $denda);
+        return back()->with('success', 'Pengajuan pengembalian dikirim. Menunggu konfirmasi petugas.');
     }
 
 }

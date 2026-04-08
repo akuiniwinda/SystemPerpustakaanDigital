@@ -12,15 +12,14 @@
       <h4 class="card-title">Form Pinjam Buku</h4>
       <p class="card-description">Konfirmasi Peminjaman Buku</p>
 
-      @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-            <p>{{ $error }}</p>
-            @endforeach
-        </div>
-      @endif
+  @if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-      <form action="{{ route('anggota.pinjam', $buku->id) }}" method="POST"">
+      <form action="{{ route('anggota.pinjam', $buku->id) }}" method="POST">
         @csrf
 
         <!-- NAMA -->
@@ -28,6 +27,11 @@
             <label>Nama</label>
             <input type="text" class="form-control"
                    value="{{ $user->nama }}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Stok Tersedia</label>
+            <input type="text" class="form-control" value="{{ $buku->stock }}" readonly>
         </div>
 
         <!-- TANGGAL -->
@@ -41,7 +45,7 @@
         <div class="form-group">
             <label>Tanggal Pengembalian</label>
             <input type="text" class="form-control"
-                   value="{{ \Carbon\Carbon::now()->addDays(30)->format('d-m-Y') }}" readonly>
+                   value="{{ \Carbon\Carbon::now()->addDays(2)->format('d-m-Y') }}" readonly>
         </div>
 
         <!-- BUKU -->

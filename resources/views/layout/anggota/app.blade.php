@@ -30,7 +30,7 @@
 
 <!-- Main CSS -->
 <link rel="stylesheet" href="{{ asset('assets/css/vertical-layout-light/style.css') }}">
-  <link rel="shortcut icon" href="images/favicon.png" />
+<link rel="shortcut icon" href="{{ asset('assets/images/logo-buku.svg') }}" />
 
   @include('layout.anggota.css')
 </head>

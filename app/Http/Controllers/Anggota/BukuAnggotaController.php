@@ -8,21 +8,23 @@ use App\Models\Book;
 class BukuAnggotaController extends Controller
 {
     public function index(){
-        // Ambil data About yang aktif
-        $activeBuku = Book::where('is_active', 'active')->get();
+        // Ambil semua data buku
+        $bukubuku = Book::all();
 
         // Kirim ke view
-        return view('page.anggota.buku.index', compact('activeBuku'));
+        return view('page.anggota.buku.index', compact('bukubuku'));
     }
+
     public function show($id){
-        //cari ke tabel kelas di database sesuai atau berdasarkan id kelas ada atau tidak
+        // Cari buku berdasarkan id
         $buku = Book::find($id);
 
-        //cek apakah datanya ada atau tidak
-        return redirect()->route('anggota.buku.index');
+        // Jika buku tidak ditemukan, redirect ke index dengan pesan error
+        if (!$buku) {
+            return redirect()->route('anggota.buku.index')->with('error', 'Buku tidak ditemukan.');
+        }
 
-        //kembalikan kelas ke halaman show dan kembalikan data user yang di ambil
-
+        // Tampilkan halaman show
         return view('page.anggota.buku.show', compact('buku'));
     }
 }

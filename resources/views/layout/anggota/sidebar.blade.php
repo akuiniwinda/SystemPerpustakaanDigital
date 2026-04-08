@@ -6,16 +6,15 @@
         $user = session('user');
     @endphp
 
-    <!-- Profile -->
+    <!-- profile -->
     <div class="profile-card text-center">
         <img src="{{ $user->foto ? asset('storage/'.$user->foto) : asset('assets/images/default.png') }}"
-             class="profile-img">
-
+            class="profile-img">
         <div class="role">Anggota</div>
         <h3 class="name">{{ $user->nama }}</h3>
     </div>
 
-    <!-- Menu -->
+    <!-- isi sidebar -->
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link" href="{{ route('anggota.dashboard.index') }}">

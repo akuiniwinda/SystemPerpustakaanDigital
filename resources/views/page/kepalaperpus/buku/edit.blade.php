@@ -7,21 +7,17 @@
       <p class="card-description">
         Tambah Data Buku
       </p>
-      @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-            </ul>
-        </div>
-        @endif
-      <form class="forms-sample" action="{{ route('books.update', $books->id) }}" method="POST" enctype="multipart/form-data">
+      <form class="forms-sample" action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
+        <div class="form-group">
+            <label>Stock</label>
+            <input type="number" name="stock" class="form-control" value="{{ $book->stock }}" min="1">
+        </div>
         <div class="form-group">
           <label>Judul</label>
-          <input type="text" name="judul" class="form-control" value="{{$books->judul}}">
+          <input type="text" name="judul" class="form-control" value="{{$book->judul}}">
             @error('judul')
 	            <small style="color:red">{{$message}}</small>
             @enderror
@@ -29,7 +25,7 @@
 
         <div class="form-group">
           <label>Penulis</label>
-          <input type="text" name="penulis" class="form-control" value="{{$books->penulis}}">
+          <input type="text" name="penulis" class="form-control" value="{{$book->penulis}}">
             @error('penulis')
 	            <small style="color:red">{{$message}}</small>
             @enderror
@@ -37,7 +33,7 @@
 
         <div class="form-group">
           <label>Tahun Terbit</label>
-          <input type="number" name="tahun_terbit" class="form-control" value="{{$books->tahun_terbit}}">
+          <input type="number" name="tahun_terbit" class="form-control" value="{{$book->tahun_terbit}}">
             @error('tahun_terbit')
 	            <small style="color:red">{{$message}}</small>
             @enderror
@@ -45,7 +41,7 @@
 
         <div class="form-group">
           <label>Deskripsi</label>
-          <textarea name="deskripsi" class="form-control" rows="4" value="{{$books->deskripsi}}"></textarea>
+          <textarea name="deskripsi" class="form-control" rows="4">{{ old('deskripsi', $book->deskripsi) }}</textarea>
             @error('deskripsi')
 	            <small style="color:red">{{$message}}</small>
             @enderror
@@ -57,14 +53,6 @@
             @error('foto')
 	            <small style="color:red">{{$message}}</small>
             @enderror
-        </div>
-
-        <div class="form-group">
-            <label>Status Aktif</label>
-            <select name="is_active" class="form-control">
-                <option value="active">Active</option>
-                <option value="nonactive">Non Active</option>
-            </select>
         </div>
 
         <div class="form-group">

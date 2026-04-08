@@ -39,13 +39,18 @@
                     <textarea class="form-control" rows="5" readonly>{{ $buku->deskripsi }}</textarea>
                 </div>
 
+                <div class="mb-3">
+                    <label>Stok Tersedia</label>
+                    <h6>{{ $buku->stock }}</h6>
+                </div>
+
             </div>
 
         </div>
 
         <!-- BUTTON -->
         <div class="mt-3">
-            <a href="{{ route('petugas.buku.index') }}" class="btn btn-primary">
+            <a href="{{ route('anggota.buku.index') }}" class="btn btn-primary">
                 Kembali
             </a>
         </div>

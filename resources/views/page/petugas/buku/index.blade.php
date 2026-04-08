@@ -1,6 +1,6 @@
 @extends('layout.petugas.app')
 @section('content')
-<div class="col-lg-10 grid-margin stretch-card">
+<div class="col-lg-14 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Tabel Buku</h4>
@@ -22,11 +22,13 @@
                             <td>{{$buku->judul}}</td>
                             <td>{{$buku->penulis}}</td>
                             <td>
-                              @if($buku->status == 'tersedia')
-                                <span class="badge badge-success">Tersedia</span>
-                              @else
-                                <span class="badge badge-danger">Dipinjam</span>
-                              @endif
+                                @if($buku->status == 'tersedia')
+                                    <span class="badge badge-success">Tersedia</span>
+                                @elseif($buku->status == 'habis')
+                                    <span class="badge badge-secondary">Habis</span>
+                                @else
+                                    <span class="badge badge-danger">Dipinjam</span>
+                                @endif
                             </td>
                             <td>
                                 <div>
