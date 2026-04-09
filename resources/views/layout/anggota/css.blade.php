@@ -4,7 +4,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;   /* pusatkan secara horizontal */
+            align-items: center;   
         }
 
         .profile-img {
@@ -13,7 +13,7 @@
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 10px;
-            display: block;        /* pastikan block, bukan inline */
+            display: block;        
         }
 
         .role {

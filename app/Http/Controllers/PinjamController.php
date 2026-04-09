@@ -72,4 +72,38 @@ class PinjamController extends Controller
         return back()->with('success', 'Pengajuan pengembalian dikirim. Menunggu konfirmasi petugas.');
     }
 
+    // Halaman daftar denda yang belum lunas
+    public function daftarDenda()
+    {
+        $user = session('user');
+        $dendas = Pinjam::with('buku')
+                    ->where('anggota_id', $user->id)
+                    ->where('status', 'selesai')
+                    ->where('denda', '>', 0)
+                    ->where('status_denda', '!=', 'lunas')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        // Total besar denda untuk card
+        $besarDenda = $dendas->sum('denda');
+
+        return view('page.anggota.denda.index', compact('dendas', 'besarDenda'));
+    }
+
+    // Mengajukan pelunasan denda (setelah bayar offline)
+    public function ajukanDenda($id)
+    {
+        $pinjam = Pinjam::where('id', $id)
+                    ->where('anggota_id', session('user')->id)
+                    ->firstOrFail();
+
+        if ($pinjam->status_denda != 'belum') {
+            return back()->with('error', 'Denda sudah diajukan atau sudah lunas.');
+        }
+
+        $pinjam->update(['status_denda' => 'diajukan']);
+
+        return back()->with('success', 'Pengajuan pelunasan denda dikirim. Petugas akan segera memproses.');
+    }
+
 }

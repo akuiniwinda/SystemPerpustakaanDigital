@@ -16,9 +16,9 @@
         @php
             // Cek apakah user sedang meminjam buku ini (status belum selesai)
             $sedangMeminjam = \App\Models\Pinjam::where('anggota_id', session('user')->id)
-                                ->where('book_id', $buku->id)
-                                ->whereNotIn('status', ['selesai'])
-                                ->exists();
+                    ->where('book_id', $buku->id)
+                    ->whereNotIn('status', ['selesai', 'ditolak'])
+                    ->exists();
             $stokHabis = ($buku->stock <= 0);
         @endphp
         <div class="col-md-2 mb-4">

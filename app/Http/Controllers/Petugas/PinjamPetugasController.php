@@ -94,13 +94,31 @@ class PinjamPetugasController extends Controller
             'tanggal_kembali' => now(),
             'denda' => $pinjam->denda_pengajuan,
             'pengajuan_pengembalian' => false,
+            'status_denda' => $pinjam->denda_pengajuan > 0 ? 'belum' : 'lunas', // jika denda 0 langsung lunas
         ]);
 
-        // Tambah stok buku
         $buku = Book::find($pinjam->book_id);
         $buku->increment('stock');
         $buku->update(['status' => 'tersedia']);
 
         return redirect()->route('petugas.pinjam.index')->with('success', 'Pengembalian disetujui. Denda: Rp ' . number_format($pinjam->denda_pengajuan, 0, ',', '.'));
+    }
+
+    // Daftar pengajuan denda
+    public function listPengajuanDenda(){
+        $pengajuan = Pinjam::with(['anggota', 'buku'])
+                    ->where('status_denda', 'diajukan')
+                    ->get();
+        return view('page.petugas.denda.index', compact('pengajuan'));
+    }
+
+    // Konfirmasi pelunasan denda
+    public function konfirmasiDenda($id){
+        $pinjam = Pinjam::findOrFail($id);
+        if ($pinjam->status_denda != 'diajukan') {
+            return back()->with('error', 'Status tidak valid.');
+        }
+        $pinjam->update(['status_denda' => 'lunas']);
+        return back()->with('success', 'Denda telah dilunasi.');
     }
 }

@@ -30,6 +30,8 @@ Route::prefix('perpustakaandigital')
     Route::get('/pinjam/{id}', [PinjamController::class, 'create'])->name('pinjam.create');
     Route::post('/pinjam/{id}', [PinjamController::class, 'store'])->name('pinjam');
     Route::post('/kembalikan/{id}', [PinjamController::class, 'ajukanKembali'])->name('kembalikan');
+    Route::get('denda', [PinjamController::class, 'daftarDenda'])->name('denda.index');
+    Route::post('denda/{id}/ajukan', [PinjamController::class, 'ajukanDenda'])->name('denda.ajukan');
 });
 
 //KEPALA PERPUSTAKAAN
@@ -62,7 +64,10 @@ Route::prefix('petugas')
         Route::post('/konfirmasi/{id}', [PinjamPetugasController::class, 'konfirmasi'])->name('konfirmasi');
 
         // Konfirmasi pengembalian (tambahkan ini)
-        Route::post('/kembali/{id}', [PinjamPetugasController::class, 'konfirmasiKembali'])->name('petugas.kembali');
+        Route::post('/kembali/{id}', [PinjamPetugasController::class, 'konfirmasiKembali'])->name('kembali');
+
+        Route::get('/pengajuan-denda', [PinjamPetugasController::class, 'listPengajuanDenda'])->name('pengajuan.denda');
+        Route::post('/konfirmasi-denda/{id}', [PinjamPetugasController::class, 'konfirmasiDenda'])->name('konfirmasi.denda');
 
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/download', [LaporanController::class, 'download'])->name('laporan.download');

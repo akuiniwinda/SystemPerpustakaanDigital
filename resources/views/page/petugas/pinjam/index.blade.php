@@ -4,6 +4,11 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Tabel Peminjaman Buku</h4>
+      <div class="mb-3">
+       <a href="{{ route('petugas.pengajuan.denda') }}" class="btn btn-success btn-sm">
+            Konfirmasi Denda
+        </a>
+      </div>
       <div class="table-responsive">
         <table class="table table-hover">
           <thead>
@@ -52,21 +57,35 @@
                         @endif
                     </span>
                 </td>
-                <td>
+                <td class="text-center">
                     @if($pinjam->status == 'pengajuan')
-                        <a href="{{ route('petugas.pinjam.show', $pinjam->id) }}" class="btn btn-warning">Proses</a>
+                        <a href="{{ route('petugas.pinjam.show', $pinjam->id) }}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-check-circle"></i> Proses
+                        </a>
+                    @elseif($pinjam->status == 'meminjam')
+                        <span class="badge bg-secondary">Sedang dipinjam</span>
+                    @elseif($pinjam->status == 'selesai')
+                        <span class="badge bg-success">Selesai</span>
+                    @elseif($pinjam->status == 'ditolak')
+                        <span class="badge bg-danger">Ditolak</span>
                     @else
-                        <span>Sudah Konfirmasi</span>
+                        <span class="text-muted">-</span>
                     @endif
                 </td>
-                <td>
-                    @if($pinjam->status == 'meminjam' && $pinjam->pengajuan_pengembalian)
-                        <form action="{{ url('/petugas/kembali/'.$pinjam->id) }}" method="POST">
-                            @csrf
-                            <button class="btn btn-warning">Konfirmasi Kembali</button>
-                        </form>
+                <td class="text-center">
+                    @if($pinjam->status == 'meminjam')
+                        @if($pinjam->pengajuan_pengembalian)
+                            <form action="{{ route('petugas.kembali', $pinjam->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <i class="fas fa-undo-alt"></i> Konfirmasi Kembali
+                                </button>
+                            </form>
+                        @else
+                            <span class="badge bg-warning text-dark">Menunggu pengajuan</span>
+                        @endif
                     @else
-                        <span>Revisi ini</span>
+                        <span class="text-muted">-</span>
                     @endif
                 </td>
             </tr>

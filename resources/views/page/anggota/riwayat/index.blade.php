@@ -25,10 +25,14 @@
                             <span class="badge badge-warning">Dipinjam</span>
                         @elseif ($pinjam->status == 'selesai')
                             <span class="badge badge-success">Selesai</span>
+                        @elseif ($pinjam->status == 'pengajuan')
+                            <span class="badge badge-info">Menunggu Konfirmasi</span>
+                        @elseif ($pinjam->status == 'ditolak')
+                            <span class="badge badge-danger">Ditolak</span>
                         @endif
                     </div>
 
-                    <!-- BUTTON (akan selalu di bagian bawah karena flex-grow pada area sebelumnya) -->
+                    <!-- BUTTON -->
                     <div class="mt-2">
                         @if ($pinjam->status == 'meminjam' && !$pinjam->pengajuan_pengembalian)
                             <form action="{{ route('anggota.kembalikan', $pinjam->id) }}" method="POST">
@@ -39,6 +43,8 @@
                             <button class="btn btn-warning btn-sm" disabled>Menunggu Konfirmasi Pengembalian</button>
                         @elseif ($pinjam->status == 'pengajuan')
                             <button class="btn btn-warning btn-sm" disabled>Menunggu Konfirmasi Pinjam</button>
+                        @elseif ($pinjam->status == 'ditolak')
+                            <button class="btn btn-secondary btn-sm" disabled>Pinjaman Ditolak</button>
                         @else
                             <button class="btn btn-secondary btn-sm" disabled>Sudah Dikembalikan</button>
                         @endif
