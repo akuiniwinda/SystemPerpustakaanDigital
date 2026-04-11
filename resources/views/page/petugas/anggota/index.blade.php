@@ -23,8 +23,7 @@
             @foreach ($anggotas as $anggota)
             <tr>
               <td>
-                <img src="{{ asset('storage/'.$anggota->foto) }}"
-                     style="width:50px;height:70px;object-fit:cover;">
+                <img src="{{ asset('storage/'.$anggota->foto) }}">
               </td>
 
               <td>{{ $anggota->nama }}</td>
@@ -47,8 +46,21 @@
             </tr>
             @endforeach
           </tbody>
-
         </table>
+        @if ($anggotas->total() > 0)
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4">
+                <div class="text-muted small mb-2 mb-sm-0">
+                    Menampilkan {{ $anggotas->firstItem() }} sampai {{ $anggotas->lastItem() }} dari {{ $anggotas->total() }} data
+                </div>
+                <div>
+                    {{ $anggotas->links('pagination::simple-bootstrap-5') }}
+                </div>
+            </div>
+         @else
+            <div class="text-center text-muted mt-4">
+                Tidak ada data anggota.
+            </div>
+        @endif
       </div>
     </div>
   </div>

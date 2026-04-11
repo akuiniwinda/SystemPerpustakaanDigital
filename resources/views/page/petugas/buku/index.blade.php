@@ -39,6 +39,21 @@
                         @endforeach
                       </tbody>
                     </table>
+                    <!-- Info & Pagination -->
+                    @if ($Books->total() > 0)
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4">
+                            <div class="text-muted small mb-2 mb-sm-0">
+                                Menampilkan {{ $Books->firstItem() }} sampai {{ $Books->lastItem() }} dari {{ $Books->total() }} data
+                            </div>
+                            <div>
+                                {{ $Books->links('pagination::simple-bootstrap-5') }}
+                            </div>
+                        </div>
+                    @else
+                        <div class="text-center text-muted mt-4">
+                            Tidak ada data buku.
+                        </div>
+                    @endif
                   </div>
                 </div>
               </div>

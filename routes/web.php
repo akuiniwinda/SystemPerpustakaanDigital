@@ -4,6 +4,7 @@ use App\Http\Controllers\Anggota\AnggotaController;
 use App\Http\Controllers\Anggota\BukuAnggotaController;
 use App\Http\Controllers\Anggota\DashboardController;
 use App\Http\Controllers\Anggota\RiwayatAnggotaController;
+use App\Http\Controllers\KepalaPerpus\AkunKepalaPerpusController;
 use App\Http\Controllers\KepalaPerpus\BukuController;
 use App\Http\Controllers\KepalaPerpus\CekLaporanController;
 use App\Http\Controllers\KepalaPerpus\DashboardKepalaPerpusController;
@@ -43,6 +44,7 @@ Route::prefix('kepalaperpus')
     Route::resource('petugas', PetugasController::class);
     Route::resource('dashboard', DashboardKepalaPerpusController::class);
     Route::resource('books', BukuController::class);
+    Route::resource('tambahakun', AkunKepalaPerpusController::class);
     Route::get('/laporan', [CekLaporanController::class, 'index'])->name('laporan.index');
     Route::post('/laporan/{id}/lihat', [CekLaporanController::class, 'lihat'])->name('laporan.lihat');
     Route::post('/books/update-status/{id}', [BukuController::class, 'updateStatus'])->name('books.toggle');
@@ -51,10 +53,10 @@ Route::prefix('kepalaperpus')
 
 
 
-Route::prefix('petugas')
-    ->name('petugas.')
-    ->middleware('cekRole:petugas')
-    ->group(function () {
+    Route::prefix('petugas')
+        ->name('petugas.')
+        ->middleware('cekRole:petugas')
+        ->group(function () {
         Route::resource('anggota', AnggotaPetugasController::class);
         Route::resource('buku', BukuPetugasController::class);
         Route::resource('dashboard', DashboardPetugasController::class);

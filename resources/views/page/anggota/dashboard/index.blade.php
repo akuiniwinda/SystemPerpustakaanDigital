@@ -1,6 +1,5 @@
 @extends('layout.anggota.app')
 @section('content')
-    {{-- Ganti col-md-8 menjadi col-12 --}}
     <div class="col-12 grid-margin transparent">
         @php $user = session('user'); @endphp
 

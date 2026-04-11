@@ -3,7 +3,24 @@
 <div class="col-lg-15 grid-margin stretch-card">
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Tabel Peminjaman Buku</h4>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <h4 class="card-title mb-0">Tabel Peminjaman Buku</h4>
+            <div class="d-flex gap-2">
+                <form method="GET" action="{{ route('petugas.pinjam.index') }}" id="searchForm">
+                    <div class="input-group" style="width: 260px;">
+                        <div class="input-group-prepend hover-cursor" id="searchIcon" style="cursor: pointer;">
+                            <span class="input-group-text">
+                                <i class="icon-search"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="search" class="form-control" id="searchInput"
+                            placeholder="Cari nama atau judul..."
+                            value="{{ request('search') }}"
+                            aria-label="search">
+                    </div>
+                </form>
+            </div>
+        </div>
       <div class="mb-3">
        <a href="{{ route('petugas.pengajuan.denda') }}" class="btn btn-success btn-sm">
             Konfirmasi Denda
@@ -13,11 +30,11 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>Foto</th>
               <th>Nama</th>
               <th>Judul Buku</th>
               <th>Tanggal Pinjam</th>
               <th>Rencana Kembali</th>
+              <th>Tanggal Kembali</th>
               <th>Denda</th>
               <th>Status</th>
               <th>Proses Pinjam</th>
@@ -27,14 +44,11 @@
           <tbody>
             @foreach ($Pinjambuku as $pinjam)
             <tr>
-                <td>
-                    <img src="{{ asset('storage/'.$pinjam->anggota->foto) }}"
-                         style="width:50px;height:50px;border-radius:50%;object-fit:cover;">
-                </td>
                 <td>{{ $pinjam->anggota->nama }}</td>
                 <td>{{ $pinjam->buku->judul }}</td>
                 <td>{{ \Carbon\Carbon::parse($pinjam->tanggal_pinjam)->format('d-m-Y') }}</td>
                 <td>{{ \Carbon\Carbon::parse($pinjam->tanggal_pengembalian)->format('d-m-Y') }}</td>
+                <td>{{ $pinjam->tanggal_kembali }}</td>
                 <td>
                     @if ($pinjam->denda > 0)
                         <span class="text-danger">Rp {{ number_format($pinjam->denda) }}</span>
@@ -84,6 +98,8 @@
                         @else
                             <span class="badge bg-warning text-dark">Menunggu pengajuan</span>
                         @endif
+                    @elseif($pinjam->status == 'selesai')
+                        <span class="badge bg-success">Selesai</span>
                     @else
                         <span class="text-muted">-</span>
                     @endif
@@ -92,6 +108,21 @@
             @endforeach
           </tbody>
         </table>
+        <!-- Info & Pagination -->
+        @if ($Pinjambuku->total() > 0)
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4">
+                <div class="text-muted small mb-2 mb-sm-0">
+                    Menampilkan {{ $Pinjambuku->firstItem() }} sampai {{ $Pinjambuku->lastItem() }} dari {{ $Pinjambuku->total() }} data
+                </div>
+                <div>
+                    {{ $Pinjambuku->links('pagination::simple-bootstrap-5') }}
+                </div>
+            </div>
+        @else
+            <div class="text-center text-muted mt-4">
+                Tidak ada data peminjaman.
+            </div>
+        @endif
       </div>
     </div>
   </div>

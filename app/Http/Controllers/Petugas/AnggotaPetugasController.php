@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class AnggotaPetugasController extends Controller
 {
     public function index(){
-        $anggotas = Anggota::all();
+        $anggotas = Anggota::paginate(5);
         return view('page.petugas.anggota.index', compact('anggotas'));
     }
 

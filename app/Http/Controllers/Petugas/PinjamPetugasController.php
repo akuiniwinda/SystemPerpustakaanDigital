@@ -10,8 +10,18 @@ use Illuminate\Http\Request;
 class PinjamPetugasController extends Controller
 {
     //tampilkan semua data
-    public function index(){
-        $Pinjambuku = Pinjam::with(['anggota','buku'])->get();
+    public function index(Request $request){
+        $search = $request->input('search');
+        $Pinjambuku = Pinjam::with(['anggota', 'buku'])
+            ->when($search, function ($query, $search) {
+                return $query->whereHas('anggota', function ($q) use ($search) {
+                    $q->where('nama', 'like', '%' . $search . '%');
+                })->orWhereHas('buku', function ($q) use ($search) {
+                    $q->where('judul', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
         return view('page.petugas.pinjam.index', compact('Pinjambuku'));
     }
 

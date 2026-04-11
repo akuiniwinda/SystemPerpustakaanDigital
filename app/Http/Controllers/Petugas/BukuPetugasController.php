@@ -9,7 +9,7 @@ class BukuPetugasController extends Controller
 {
     //tampilkan semua data
     public function index(){
-        $Books = Book::all();
+        $Books = Book::paginate(5);
         return view('page.petugas.buku.index', compact('Books'));
     }
 }

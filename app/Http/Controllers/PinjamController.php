@@ -32,11 +32,19 @@ class PinjamController extends Controller
             return back()->with('error', 'Anda sudah meminjam buku ini.');
         }
 
+        //mkasimal 3 buku yg dipinjam
+        $activeBorrowCount = Pinjam::where('anggota_id', $user->id)
+                        ->where('status', 'meminjam')
+                        ->count();
+        if ($activeBorrowCount >= 3) {
+            return back()->with('error', 'Anda sudah meminjam 3 buku. Selesaikan pengembalian terlebih dahulu.');
+        }
+
         Pinjam::create([
             'anggota_id' => $user->id,
             'book_id' => $book_id,
             'tanggal_pinjam' => now(),
-            'tanggal_pengembalian' => now()->addDays(2),
+            'tanggal_pengembalian' => now()->addDays(1),
             'status' => 'pengajuan',
             'pengajuan_pengembalian' => false,
         ]);

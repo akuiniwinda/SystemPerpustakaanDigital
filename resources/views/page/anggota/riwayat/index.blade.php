@@ -2,6 +2,14 @@
 @section('content')
     <!-- JUDUL -->
     <h4 class="text-center mb-4">Buku Dipinjam</h4>
+
+    <!-- SEARCH -->
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            <input type="text" class="form-control" placeholder="Search now">
+        </div>
+    </div>
+
     <!--Buku-->
     <div class="row justify-content-center">
         @foreach ($pinjams as $pinjam)
