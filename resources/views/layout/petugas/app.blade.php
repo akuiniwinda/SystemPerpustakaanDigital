@@ -31,6 +31,10 @@
 <!-- Main CSS -->
 <link rel="stylesheet" href="{{ asset('assets/css/vertical-layout-light/style.css') }}">
   <link rel="shortcut icon" href="images/favicon.png" />
+  <!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
+
 
   @include('layout.petugas.css')
 </head>
@@ -81,6 +85,39 @@
   <script src="{{ asset('assets/js/dashboard.js') }}"></script>
   <script src="{{ asset('assets/js/Chart.roundedBarCharts.js') }}"></script>
   <!-- End custom js for this page-->
+
+  <!-- jQuery (wajib) -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchIcon = document.getElementById('searchIcon');
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
+
+        // Ketika icon search diklik
+        if (searchIcon) {
+            searchIcon.addEventListener('click', function() {
+                searchForm.submit();
+            });
+        }
+
+        // Ketika tekan Enter di input
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchForm.submit();
+                }
+            });
+        }
+    });
+</script>
+@endpush
 </body>
 
 </html>

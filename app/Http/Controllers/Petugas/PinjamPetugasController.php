@@ -10,8 +10,18 @@ use Illuminate\Http\Request;
 class PinjamPetugasController extends Controller
 {
     //tampilkan semua data
-    public function index(){
-        $Pinjambuku = Pinjam::with(['anggota','buku'])->get();
+    public function index(Request $request){
+        $search = $request->input('search');
+        $Pinjambuku = Pinjam::with(['anggota', 'buku'])
+            ->when($search, function ($query, $search) {
+                return $query->whereHas('anggota', function ($q) use ($search) {
+                    $q->where('nama', 'like', '%' . $search . '%');
+                })->orWhereHas('buku', function ($q) use ($search) {
+                    $q->where('judul', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
         return view('page.petugas.pinjam.index', compact('Pinjambuku'));
     }
 
@@ -89,18 +99,37 @@ class PinjamPetugasController extends Controller
             return back()->with('error', 'Tidak ada pengajuan pengembalian yang valid.');
         }
 
+        $dendaFinal = max(0, $pinjam->denda_pengajuan);
         $pinjam->update([
             'status' => 'selesai',
             'tanggal_kembali' => now(),
-            'denda' => $pinjam->denda_pengajuan,
+            'denda' => $dendaFinal,
             'pengajuan_pengembalian' => false,
+            'status_denda' => $dendaFinal > 0 ? 'belum' : 'lunas',
         ]);
 
-        // Tambah stok buku
         $buku = Book::find($pinjam->book_id);
         $buku->increment('stock');
         $buku->update(['status' => 'tersedia']);
 
         return redirect()->route('petugas.pinjam.index')->with('success', 'Pengembalian disetujui. Denda: Rp ' . number_format($pinjam->denda_pengajuan, 0, ',', '.'));
+    }
+
+    // Daftar pengajuan denda
+    public function listPengajuanDenda(){
+        $pengajuan = Pinjam::with(['anggota', 'buku'])
+                    ->where('status_denda', 'diajukan')
+                    ->get();
+        return view('page.petugas.denda.index', compact('pengajuan'));
+    }
+
+    // Konfirmasi pelunasan denda
+    public function konfirmasiDenda($id){
+        $pinjam = Pinjam::findOrFail($id);
+        if ($pinjam->status_denda != 'diajukan') {
+            return back()->with('error', 'Status tidak valid.');
+        }
+        $pinjam->update(['status_denda' => 'lunas']);
+        return back()->with('success', 'Denda telah dilunasi.');
     }
 }

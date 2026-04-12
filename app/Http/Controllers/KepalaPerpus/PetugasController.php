@@ -12,8 +12,15 @@ use Illuminate\Support\Facades\Storage;
 class PetugasController extends Controller
 {
     //tampilkan semua data
-    public function index(){
-        $Petugases = Petugas::all();
+    public function index(Request $request){
+        $search = $request->input('search');
+
+        $Petugases = Petugas::when($search, function ($query, $search) {
+                return $query->where('nama', 'like', '%' . $search . '%')
+                            ->orWhere('alamat', 'like', '%' . $search . '%');
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(5);
         return view('page.kepalaperpus.petugas.index', compact('Petugases'));
     }
 
@@ -77,7 +84,7 @@ class PetugasController extends Controller
         return view('page.kepalaperpus.petugas.show', compact('datapetugas'));
     }
 
-        public function edit($id){
+    public function edit($id){
         //siapkan data
         $petugas = Petugas::all();
 

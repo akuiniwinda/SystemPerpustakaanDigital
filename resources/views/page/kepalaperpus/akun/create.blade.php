@@ -3,9 +3,9 @@
 <div class="col-md-6 grid-margin stretch-card">
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Detail Edit Buku</h4>
+      <h4 class="card-title">Form Tambah Akun</h4>
       <p class="card-description">
-        Edit Data Buku
+        Tambah Akun Kepala Perpustakaan
       </p>
       @if ($errors->any())
         <div class="alert alert-danger">
@@ -14,20 +14,19 @@
             @endforeach
         </div>
         @endif
-      <form class="forms-sample" action="{{ route('petugas.update', $Petugases->id) }}" method="POST" enctype="multipart/form-data">
+      <form class="forms-sample" action="{{ route('tambahakun.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
         <div class="form-group">
             <label>Nama</label>
-            <input type="text" name="nama" class="form-control" value="{{$Petugases->nama}}">
-            @error('nama')
+            <input type="text" name="name" class="form-control" placeholder="Masukkan nama">
+            @error('name')
 	            <small style="color:red">{{$message}}</small>
             @enderror
         </div>
 
         <div class="form-group">
             <label>NIP</label>
-            <input type="text" name="nip" class="form-control" value="{{$Petugases->nip}}">
+            <input type="text" name="nip" class="form-control" placeholder="Masukkan NIP">
             @error('nip')
 	            <small style="color:red">{{$message}}</small>
             @enderror
@@ -35,7 +34,7 @@
 
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" class="form-control" value="{{$Petugases->email}}">
+            <input type="email" name="email" class="form-control" placeholder="Masukkan email">
             @error('email')
 	            <small style="color:red">{{$message}}</small>
             @enderror
@@ -44,17 +43,6 @@
         <div class="form-group">
             <label>Password</label>
             <input type="password" name="password" class="form-control" placeholder="Masukkan password">
-            @error('password')
-	            <small style="color:red">{{$message}}</small>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label>Alamat</label>
-            <textarea name="alamat" class="form-control" rows="4" value="{{$Petugases->alamat}}"></textarea>
-            @error('alamat')
-	            <small style="color:red">{{$message}}</small>
-            @enderror
         </div>
 
         <div class="form-group">
@@ -66,7 +54,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary mr-2">Submit</button>
-        <a href="{{ route('petugas.index') }}" class="btn btn-light">Cancel</a>
+        <a href="{{ route('dashboard.index') }}" class="btn btn-light">Cancel</a>
       </form>
 
     </div>

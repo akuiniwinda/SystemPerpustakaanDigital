@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Anggota;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use Illuminate\Http\Request;
 
 class BukuAnggotaController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         // Ambil semua data buku
-        $bukubuku = Book::all();
+        $search = $request->input('search');
+
+        $bukubuku = Book::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('judul', 'LIKE', "%{$search}%")
+                            ->orWhere('penulis', 'LIKE', "%{$search}%");
+            })
+            ->get();
 
         // Kirim ke view
         return view('page.anggota.buku.index', compact('bukubuku'));

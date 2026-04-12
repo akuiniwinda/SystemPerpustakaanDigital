@@ -6,11 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Anggota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AnggotaPetugasController extends Controller
 {
-    public function index(){
-        $anggotas = Anggota::all();
+    public function index(Request $request){
+        $search = $request->input('search');
+
+        $anggotas = Anggota::when($search, function ($query, $search) {
+                return $query->where('nama', 'like', '%' . $search . '%')
+                            ->orWhere('alamat', 'like', '%' . $search . '%');
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(5);
         return view('page.petugas.anggota.index', compact('anggotas'));
     }
 
@@ -49,5 +57,33 @@ class AnggotaPetugasController extends Controller
 
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login!');
+    }
+
+    public function show($id){
+        //cari ke tabel kelas di database sesuai atau berdasarkan id kelas ada atau tidak
+        $dataanggota = Anggota::find($id);
+
+        //cek apakah datanya ada atau tidak
+        if($dataanggota == null){
+            return redirect()->route('petugas.anggota.index');
+        }
+
+        //kembalikan kelas ke halaman show dan kembalikan data user yang di ambil
+
+        return view('page.petugas.anggota.show', compact('dataanggota'));
+    }
+
+        public function destroy($id){
+        $hpusdataAnggota = Anggota::find($id);
+
+        if ($hpusdataAnggota != null){
+            if ($hpusdataAnggota->foto) {
+                Storage::disk('public')->delete($hpusdataAnggota->foto);
+            }
+
+            $hpusdataAnggota->delete();
+        }
+
+        return redirect()->route('petugas.anggota.index')->with('success', 'Data berhasil dihapus');
     }
 }

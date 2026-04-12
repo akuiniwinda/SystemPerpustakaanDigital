@@ -32,11 +32,19 @@ class PinjamController extends Controller
             return back()->with('error', 'Anda sudah meminjam buku ini.');
         }
 
+        //mkasimal 3 buku yg dipinjam
+        $activeBorrowCount = Pinjam::where('anggota_id', $user->id)
+                        ->where('status', 'meminjam')
+                        ->count();
+        if ($activeBorrowCount >= 3) {
+            return back()->with('error', 'Anda sudah meminjam 3 buku. Selesaikan pengembalian terlebih dahulu.');
+        }
+
         Pinjam::create([
             'anggota_id' => $user->id,
             'book_id' => $book_id,
             'tanggal_pinjam' => now(),
-            'tanggal_pengembalian' => now()->addDays(2),
+            'tanggal_pengembalian' => now()->addDays(1),
             'status' => 'pengajuan',
             'pengajuan_pengembalian' => false,
         ]);
@@ -61,7 +69,11 @@ class PinjamController extends Controller
         $denda = 0;
         if ($today->gt($batas)) {
             $hari_telat = $today->diffInDays($batas); // selisih hari positif
-            $denda = $hari_telat * 5000;
+            $denda = max(0, $hari_telat * 5000);
+        }
+
+        if ($denda < 0) {
+            $denda = 0;
         }
 
         $pinjam->update([
@@ -70,6 +82,40 @@ class PinjamController extends Controller
         ]);
 
         return back()->with('success', 'Pengajuan pengembalian dikirim. Menunggu konfirmasi petugas.');
+    }
+
+    // Halaman daftar denda yang belum lunas
+    public function daftarDenda()
+    {
+        $user = session('user');
+        $dendas = Pinjam::with('buku')
+                    ->where('anggota_id', $user->id)
+                    ->where('status', 'selesai')
+                    ->where('denda', '>', 0)
+                    ->where('status_denda', '!=', 'lunas')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        // Total besar denda untuk card
+        $besarDenda = $dendas->sum('denda');
+
+        return view('page.anggota.denda.index', compact('dendas', 'besarDenda'));
+    }
+
+    // Mengajukan pelunasan denda (setelah bayar offline)
+    public function ajukanDenda($id)
+    {
+        $pinjam = Pinjam::where('id', $id)
+                    ->where('anggota_id', session('user')->id)
+                    ->firstOrFail();
+
+        if ($pinjam->status_denda != 'belum') {
+            return back()->with('error', 'Denda sudah diajukan atau sudah lunas.');
+        }
+
+        $pinjam->update(['status_denda' => 'diajukan']);
+
+        return back()->with('success', 'Pengajuan pelunasan denda dikirim. Petugas akan segera memproses.');
     }
 
 }

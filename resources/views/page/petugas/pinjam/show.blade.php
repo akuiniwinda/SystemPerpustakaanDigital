@@ -58,7 +58,6 @@
             <a href="{{ route('petugas.pinjam.index') }}" class="btn btn-light">Cancel</a>
         @endif
       </form>
-
     </div>
   </div>
 </div>

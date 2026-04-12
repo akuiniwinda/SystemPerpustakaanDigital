@@ -32,6 +32,9 @@
 <link rel="stylesheet" href="{{ asset('assets/css/vertical-layout-light/style.css') }}">
 <link rel="shortcut icon" href="{{ asset('assets/images/logo-buku.svg') }}" />
 
+<!-- Font Awesome (jika belum ada) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
   @include('layout.anggota.css')
 </head>
 <body>

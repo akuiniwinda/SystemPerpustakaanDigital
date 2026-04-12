@@ -3,7 +3,24 @@
 <div class="col-lg-12 grid-margin stretch-card">
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Tabel Anggota</h4>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <h4 class="card-title mb-0">Tabel Buku</h4>
+            <div class="d-flex gap-2">
+                <form method="GET" action="{{ route('petugas.anggota.index') }}" id="searchForm">
+                    <div class="input-group" style="width: 260px;">
+                        <div class="input-group-prepend hover-cursor" id="searchIcon" style="cursor: pointer;">
+                            <span class="input-group-text">
+                                <i class="icon-search"></i>
+                            </span>
+                        </div>
+                        <input type="text" name="search" class="form-control" id="searchInput"
+                            placeholder="Cari nama atau judul..."
+                            value="{{ request('search') }}"
+                            aria-label="search">
+                    </div>
+                </form>
+            </div>
+        </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -13,7 +30,6 @@
               <th>Email</th>
               <th>No Telp</th>
               <th>Nomor Induk</th>
-              <th>Jenis Kelamin</th>
               <th>Alamat</th>
               <th>Opsi</th>
             </tr>
@@ -23,32 +39,37 @@
             @foreach ($anggotas as $anggota)
             <tr>
               <td>
-                <img src="{{ asset('storage/'.$anggota->foto) }}"
-                     style="width:50px;height:70px;object-fit:cover;">
+                <img src="{{ asset('storage/'.$anggota->foto) }}">
               </td>
 
               <td>{{ $anggota->nama }}</td>
               <td>{{ $anggota->email }}</td>
               <td>{{ $anggota->no_telp }}</td>
               <td>{{ $anggota->nomor_induk }}</td>
-              <td>{{ $anggota->jenis_kelamin }}</td>
               <td>{{ $anggota->alamat }}</td>
 
               <td>
-                <a href="">Edit</a>
-                <a href="">Show</a>
-
-                <form action="" method="POST" style="display:inline;">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" onclick="return confirm('Yakin hapus?')">Delete</button>
-                </form>
+                <a href="{{ route('petugas.anggota.show', $anggota->id) }}">Show</a>
+                <a href="{{ route('petugas.anggota.delete', $anggota->id) }}" onclick="return confirm('Yakin?')">Delete</a>
               </td>
             </tr>
             @endforeach
           </tbody>
-
         </table>
+        @if ($anggotas->total() > 0)
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4">
+                <div class="text-muted small mb-2 mb-sm-0">
+                    Menampilkan {{ $anggotas->firstItem() }} sampai {{ $anggotas->lastItem() }} dari {{ $anggotas->total() }} data
+                </div>
+                <div>
+                    {{ $anggotas->links('pagination::simple-bootstrap-5') }}
+                </div>
+            </div>
+         @else
+            <div class="text-center text-muted mt-4">
+                Tidak ada data anggota.
+            </div>
+        @endif
       </div>
     </div>
   </div>
