@@ -73,7 +73,7 @@ class AnggotaPetugasController extends Controller
         return view('page.petugas.anggota.show', compact('dataanggota'));
     }
 
-        public function destroy($id){
+    public function destroy($id){
         $hpusdataAnggota = Anggota::find($id);
 
         if ($hpusdataAnggota != null){
@@ -85,5 +85,58 @@ class AnggotaPetugasController extends Controller
         }
 
         return redirect()->route('petugas.anggota.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function edit($id){
+        $Anggotas = Anggota::findOrFail($id);
+
+        // Kirim data ke view
+        return view('page.anggota.anggota.edit', compact('Anggotas'));
+    }
+
+    public function update(Request $request, $id){
+        $request->validate([
+            'foto'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'nama'           => 'required|string|max:255',
+            'email'          => 'required|email|unique:anggotas,email,' . $id,
+            'nomor_induk'    => 'required|string|max:50|unique:anggotas,nomor_induk,' . $id,
+            'no_telp'        => 'required|string|max:20',
+            'jenis_kelamin'  => 'required|in:laki-laki,perempuan',
+            'alamat'         => 'required|string',
+            'password'       => 'nullable|string|min:4',
+        ]);
+
+        //cari apakah ada user di tabel yang akan di update cari berdasarkan id
+        $dataanggota = Anggota::find($id);
+
+        $dataAnggota_update = [
+            'nama'           => $request->nama,
+            'email'          => $request->email,
+            'nomor_induk'    => $request->nomor_induk,
+            'no_telp'        => $request->no_telp,
+            'jenis_kelamin'  => $request->jenis_kelamin,
+            'alamat'         => $request->alamat,
+        ];
+
+
+        //password hanya diupdate kalau diisi
+        if ($request->password) {
+            $dataAnggota_update['password'] = Hash::make($request->password);
+        }
+
+        //foto hanya diupdate kalau diisi
+        if ($request->hasFile('foto')){
+            //hapus file gambar sebelumnya
+            Storage::disk('public')->delete($dataanggota->foto);
+
+            //upload gambar
+            $dataAnggota_update['foto'] = $request->file('foto')->store('imgpetugas', 'public');
+        }
+
+        //simpan data ke dalam base dengan data yang terbaru sesuai update
+        $dataanggota->update($dataAnggota_update);
+
+        //simpan data ke halaman beranda
+        return redirect()->route('anggota.dashboard.index');
     }
 }

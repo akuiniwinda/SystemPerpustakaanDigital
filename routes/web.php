@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
         ->name('anggota.')
         ->middleware('cekRole:anggota')
         ->group(function () {
+        Route::get('/anggota-edit/{id}', [AnggotaPetugasController::class, 'edit'])->name('petugas.anggota.edit');
+        Route::put('/anggota-update/{id}', [AnggotaPetugasController::class, 'update'])->name('petugas.anggota.update');
         Route::resource('dashboard', DashboardController::class);
         Route::resource('buku', BukuAnggotaController::class);
         Route::resource('profile', AnggotaController::class);

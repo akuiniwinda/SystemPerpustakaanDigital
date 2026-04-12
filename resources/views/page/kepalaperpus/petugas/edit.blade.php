@@ -51,7 +51,7 @@
 
         <div class="form-group">
             <label>Alamat</label>
-            <textarea name="alamat" class="form-control" rows="4" value="{{$Petugases->alamat}}"></textarea>
+            <textarea name="alamat" class="form-control" rows="4">{{ old('alamat', $Petugases->alamat) }}</textarea>
             @error('alamat')
 	            <small style="color:red">{{$message}}</small>
             @enderror
