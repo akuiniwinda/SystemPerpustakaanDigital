@@ -69,7 +69,11 @@ class PinjamController extends Controller
         $denda = 0;
         if ($today->gt($batas)) {
             $hari_telat = $today->diffInDays($batas); // selisih hari positif
-            $denda = $hari_telat * 5000;
+            $denda = max(0, $hari_telat * 5000);
+        }
+
+        if ($denda < 0) {
+            $denda = 0;
         }
 
         $pinjam->update([

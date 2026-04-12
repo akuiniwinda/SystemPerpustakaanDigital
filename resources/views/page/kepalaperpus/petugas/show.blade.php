@@ -3,39 +3,40 @@
     <!-- PROFIL -->
     <div class="card p-4 mb-5 shadow-sm">
         <div class="row align-items-center">
-
-            <!-- FOTO -->
             <div class="col-md-3 text-center">
-                <img src="{{ asset('assets/images/Jisoo.jpg') }}"
-                     style="width:150px;height:150px;border-radius:50%;object-fit:cover;">
+                @if($datapetugas->foto)
+                    <img src="{{ asset('storage/' . $datapetugas->foto) }}"
+                         style="width:150px;height:150px;border-radius:50%;object-fit:cover;"
+                         alt="Foto {{ $datapetugas->nama }}">
+                @else
+                    <img src="{{ asset('assets/images/default-avatar.jpg') }}"
+                         style="width:150px;height:150px;border-radius:50%;object-fit:cover;"
+                         alt="Default Avatar">
+                @endif
             </div>
 
-            <!-- DATA -->
+            <!-- DATA PETUGAS -->
             <div class="col-md-9">
                 <table class="table table-borderless">
                     <tr>
                         <th>Nama</th>
-                        <td>Winda</td>
+                        <td>{{ $datapetugas->nama }}</td>
                     </tr>
                     <tr>
-                        <th>NIS</th>
-                        <td>293894</td>
-                    </tr>
-                    <tr>
-                        <th>No Telepon</th>
-                        <td>08727636</td>
+                        <th>NIP</th>
+                        <td>{{ $datapetugas->nis ?? $datapetugas->nip ?? '-' }}</td>
                     </tr>
                     <tr>
                         <th>Email</th>
-                        <td>windut@gmail</td>
+                        <td>{{ $datapetugas->email }}</td>
                     </tr>
                     <tr>
                         <th>Alamat</th>
-                        <td>sybauuu</td>
+                        <td>{{ $datapetugas->alamat }}</td>
                     </tr>
                 </table>
+                <a href="{{ route('petugas.index') }}" class="btn btn-primary">Kembali</a>
             </div>
-
         </div>
     </div>
 @endsection

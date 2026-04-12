@@ -21,7 +21,7 @@
                         <div class="alert alert-info">Tidak ada denda yang perlu diajukan.</div>
                     @else
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>No</th>

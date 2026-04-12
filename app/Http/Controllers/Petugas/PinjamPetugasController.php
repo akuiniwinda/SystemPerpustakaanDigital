@@ -99,12 +99,13 @@ class PinjamPetugasController extends Controller
             return back()->with('error', 'Tidak ada pengajuan pengembalian yang valid.');
         }
 
+        $dendaFinal = max(0, $pinjam->denda_pengajuan);
         $pinjam->update([
             'status' => 'selesai',
             'tanggal_kembali' => now(),
-            'denda' => $pinjam->denda_pengajuan,
+            'denda' => $dendaFinal,
             'pengajuan_pengembalian' => false,
-            'status_denda' => $pinjam->denda_pengajuan > 0 ? 'belum' : 'lunas', // jika denda 0 langsung lunas
+            'status_denda' => $dendaFinal > 0 ? 'belum' : 'lunas',
         ]);
 
         $buku = Book::find($pinjam->book_id);

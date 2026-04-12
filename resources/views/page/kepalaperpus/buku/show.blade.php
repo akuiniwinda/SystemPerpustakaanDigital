@@ -45,9 +45,7 @@
 
         <!-- BUTTON -->
         <div class="mt-3">
-            <a href="{{ route('books.index') }} class="btn btn-primary">
-                Kembali
-            </a>
+            <a href="{{ route('books.index') }}" class="btn btn-primary">Kembali</a>
         </div>
 
     </div>

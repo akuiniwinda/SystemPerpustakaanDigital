@@ -3,7 +3,24 @@
 <div class="col-lg-14 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Tabel Buku</h4>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <h4 class="card-title mb-0">Tabel Buku</h4>
+                        <div class="d-flex gap-2">
+                            <form method="GET" action="{{ route('petugas.buku.index') }}" id="searchForm">
+                                <div class="input-group" style="width: 260px;">
+                                    <div class="input-group-prepend hover-cursor" id="searchIcon" style="cursor: pointer;">
+                                        <span class="input-group-text">
+                                            <i class="icon-search"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="search" class="form-control" id="searchInput"
+                                        placeholder="Cari nama atau judul..."
+                                        value="{{ request('search') }}"
+                                        aria-label="search">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                   <div class="table-responsive">
                     <table class="table">
                       <thead>

@@ -14,7 +14,7 @@
             @endforeach
         </div>
         @endif
-      <form class="forms-sample" action="{{ route('petugas.update', $Petugases->id) }}" method="POST"> enctype="multipart/form-data">
+      <form class="forms-sample" action="{{ route('petugas.update', $Petugases->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="form-group">

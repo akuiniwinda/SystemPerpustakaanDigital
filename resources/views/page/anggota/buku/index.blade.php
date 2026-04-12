@@ -6,7 +6,9 @@
     <!-- SEARCH -->
     <div class="row mb-4">
         <div class="col-md-6 mx-auto">
-            <input type="text" class="form-control" placeholder="Search now">
+            <form method="GET" action="{{ route('anggota.buku.index') }}">
+                <input type="text" name="search" class="form-control" placeholder="Search now" value="{{ request('search') }}" onkeyup="this.form.submit()">
+            </form>
         </div>
     </div>
 
@@ -25,7 +27,7 @@
             <div class="card text-center p-2 shadow-sm">
                 <img src="{{ asset('storage/'.$buku->foto) }}"
                     class="card-img-top"
-                    style="height:180px; object-fit:cover; border-radius:10px;">
+                    style="height:200px; object-fit:cover; border-radius:10px;">
 
                 <div class="mt-2">
                     <h6 class="mb-1 text-truncate" style="max-width:100%;">

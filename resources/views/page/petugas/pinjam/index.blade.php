@@ -65,7 +65,7 @@
                         @endif
                     ">
                         @if($pinjam->status == 'pengajuan') Menunggu Konfirmasi
-                        @elseif($pinjam->status == 'meminjam') Sedang Dipinjam
+                        @elseif($pinjam->status == 'meminjam') Dipinjam
                         @elseif($pinjam->status == 'selesai') Selesai
                         @else {{ ucfirst($pinjam->status) }}
                         @endif

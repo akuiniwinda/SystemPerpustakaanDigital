@@ -6,7 +6,9 @@
     <!-- SEARCH -->
     <div class="row mb-4">
         <div class="col-md-6 mx-auto">
-            <input type="text" class="form-control" placeholder="Search now">
+            <form method="GET" action="{{ route('anggota.riwayat.index') }}">
+                <input type="text" name="search" class="form-control" placeholder="Search now" value="{{ request('search') }}" onkeyup="this.form.submit()">
+            </form>
         </div>
     </div>
 
