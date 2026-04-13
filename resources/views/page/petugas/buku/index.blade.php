@@ -49,7 +49,9 @@
                             </td>
                             <td>
                                 <div>
-                                    <a href="{{ route('books.show', $buku->id) }}">Show</a>
+                                    <a href="{{ route('petugas.buku.show', $buku->id) }}" class="text-info mx-1">
+                                        <i class="mdi mdi-eye"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

@@ -72,6 +72,7 @@
   <script src="{{ asset('assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
   <script src="{{ asset('assets/') }}js/dataTables.select.min.js"></script>
+  <link rel="stylesheet" href="{{ asset('assets/vendors/mdi/css/materialdesignicons.min.css') }}">
 
   <!-- End plugin js for this page -->
   <!-- inject:js -->

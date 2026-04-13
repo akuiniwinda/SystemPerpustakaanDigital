@@ -124,6 +124,6 @@ class LaporanController extends Controller
             'status' => 'belum_dilihat'
         ]);
 
-        return back()->with('success', 'Laporan berhasil diupload');
+        return back()->with('success','Laporan berhasil diupload');
     }
 }
