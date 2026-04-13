@@ -44,9 +44,17 @@
                             <td>{{$petugas->alamat}}</td>
                             <td>
                                 <div>
-                                    <a href="{{ route('petugas.edit', $petugas->id) }}">Edit</a>
-                                    <a href="{{ route('petugas.show', $petugas->id) }}">Show</a>
-                                    <a href="{{ route('petugas.delete', $petugas->id) }}">Delete</a>
+                                    <a href="{{ route('petugas.edit', $petugas->id) }}" class="text-warning mx-1">
+                                        <i class="mdi mdi-tooltip-edit"></i>
+                                    </a>
+
+                                    <a href="{{ route('petugas.show', $petugas->id) }}" class="text-info mx-1">
+                                        <i class="mdi mdi-eye"></i>
+                                    </a>
+
+                                    <a href="{{ route('petugas.delete', $petugas->id) }}" class="text-danger mx-1">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

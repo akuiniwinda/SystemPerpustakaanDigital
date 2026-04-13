@@ -35,9 +35,9 @@
                         <td>{{ $dataanggota->alamat }}</td>
                     </tr>
                 </table>
+                <a href="{{ route('petugas.anggota.index') }}" class="btn btn-primary">Kembali</a>
             </div>
-
-    </div>
+        </div>
     </div>
 </div>
 @endsection

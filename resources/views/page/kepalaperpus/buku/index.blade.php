@@ -50,9 +50,15 @@
                             </td>
                             <td>
                                 <div>
-                                    <a href="{{ route('books.edit', $buku->id) }}">Edit</a>
-                                    <a href="{{ route('books.show', $buku->id) }}">Show</a>
-                                    <a href="{{ route('books.delete', $buku->id) }}">Delete</a>
+                                    <a href="{{ route('books.edit', $buku->id) }}" class="text-warning mx-1">
+                                        <i class="mdi mdi-tooltip-edit"></i>
+                                    </a>
+                                    <a href="{{ route('books.show', $buku->id) }}" class="text-info mx-1">
+                                        <i class="mdi mdi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('books.delete', $buku->id) }}" class="text-danger mx-1">
+                                        <i class="mdi mdi-delete"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

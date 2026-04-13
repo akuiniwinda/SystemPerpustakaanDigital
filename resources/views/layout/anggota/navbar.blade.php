@@ -19,10 +19,18 @@
               <img src="{{ $user->foto ? asset('storage/'.$user->foto) : asset('assets/images/default.png') }}" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="{{ route('logout') }}">
-                <i class="ti-power-off text-primary"></i>
-                Logout
-              </a>
+
+                <a class="dropdown-item" href="{{ route('logout') }}">
+                    <i class="ti-power-off text-primary"></i>
+                    Logout
+                </a>
+
+                    @if($user && $user->id)
+                    <a class="dropdown-item" href="{{ route('anggota.petugas.anggota.edit', $user->id) }}">
+                        <i class="mdi mdi-tooltip-edit text-primary"></i>
+                        Edit Akun
+                    </a>
+                    @endif
             </div>
           </li>
         </ul>

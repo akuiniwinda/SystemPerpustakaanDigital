@@ -128,12 +128,12 @@ class PetugasController extends Controller
         }
 
         //foto hanya diupdate kalau diisi
-        if ($request->hasFile('photo')){
+        if ($request->hasFile('foto')){
             //hapus file gambar sebelumnya
-            Storage::disk('public')->delete($datapetugas->photo);
+            Storage::disk('public')->delete($datapetugas->foto);
 
             //upload gambar
-            $datapetugas_update['photo'] = $request->file('photo')->store('imgpetugas', 'public');
+            $datapetugas_update['foto'] = $request->file('foto')->store('imgpetugas', 'public');
         }
 
         //simpan data ke dalam base dengan data yang terbaru sesuai update

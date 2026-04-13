@@ -21,4 +21,18 @@ class BukuPetugasController extends Controller
 
         return view('page.petugas.buku.index', compact('Books'));
     }
+
+    public function show($id){
+        //cari ke tabel kelas di database sesuai atau berdasarkan id kelas ada atau tidak
+        $databuku = Book::find($id);
+
+        //cek apakah datanya ada atau tidak
+        if($databuku == null){
+            return redirect()->route('books.index');
+        }
+
+        //kembalikan kelas ke halaman show dan kembalikan data buku yang di ambil
+
+        return view('page.petugas.buku.show', compact('databuku'));
+    }
 }

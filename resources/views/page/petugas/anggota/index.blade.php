@@ -49,8 +49,12 @@
               <td>{{ $anggota->alamat }}</td>
 
               <td>
-                <a href="{{ route('petugas.anggota.show', $anggota->id) }}">Show</a>
-                <a href="{{ route('petugas.anggota.delete', $anggota->id) }}" onclick="return confirm('Yakin?')">Delete</a>
+                <a href="{{ route('petugas.anggota.show', $anggota->id) }}" class="text-info mx-1">
+                    <i class="mdi mdi-eye"></i>
+                </a>
+                <a href="{{ route('petugas.anggota.delete', $anggota->id) }}" onclick="return confirm('Yakin?')" class="text-danger mx-1">
+                    <i class="mdi mdi-delete"></i>
+                </a>
               </td>
             </tr>
             @endforeach
