@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 class LoginController extends Controller
 {
     public function login(Request $request){
+        $totalAnggota = Anggota::count();
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -26,7 +27,7 @@ class LoginController extends Controller
             Session::put('role', 'anggota');
             Session::put('user', $anggota);
 
-            return redirect()->route('anggota.dashboard.index');
+            return redirect()->route('anggota.dashboard.index')->with(compact('totalAnggota'));
         }
 
         //cek punya petugas ada apa engganya ditabel Petugas

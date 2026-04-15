@@ -50,7 +50,7 @@
                             <td>
                                 <div>
                                     <a href="{{ route('petugas.buku.show', $buku->id) }}" class="text-info mx-1">
-                                        <i class="mdi mdi-eye"></i>
+                                        <i class="mdi mdi-eye mdi-24px"></i>
                                     </a>
                                 </div>
                             </td>

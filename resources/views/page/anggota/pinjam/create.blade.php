@@ -12,12 +12,17 @@
       <h4 class="card-title">Form Pinjam Buku</h4>
       <p class="card-description">Konfirmasi Peminjaman Buku</p>
 
-  @if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+         @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
       <form action="{{ route('anggota.pinjam', $buku->id) }}" method="POST">
         @csrf

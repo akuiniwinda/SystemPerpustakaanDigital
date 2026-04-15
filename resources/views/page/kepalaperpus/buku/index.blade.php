@@ -1,10 +1,10 @@
 @extends('layout.kepalaperpus.app')
 @section('content')
-            <div class="col-lg-10 grid-margin stretch-card">
+            <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                        <h4 class="card-title mb-0">Tabel Buku</h4>
+                        <h4 class="card-title mb-0">Daftar Buku</h4>
                         <div class="d-flex gap-2">
                             <form method="GET" action="{{ route('books.index') }}" id="searchForm">
                                 <div class="input-group" style="width: 260px;">
@@ -25,6 +25,17 @@
                         Tambah Buku
                     </a>
                   <div class="table-responsive">
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
                     <table class="table">
                       <thead>
                         <tr>
@@ -51,13 +62,13 @@
                             <td>
                                 <div>
                                     <a href="{{ route('books.edit', $buku->id) }}" class="text-warning mx-1">
-                                        <i class="mdi mdi-tooltip-edit"></i>
+                                        <i class="mdi mdi-tooltip-edit mdi-24px"></i>
                                     </a>
                                     <a href="{{ route('books.show', $buku->id) }}" class="text-info mx-1">
-                                        <i class="mdi mdi-eye"></i>
+                                        <i class="mdi mdi-eye mdi-24px"></i>
                                     </a>
-                                    <a href="{{ route('books.delete', $buku->id) }}" class="text-danger mx-1">
-                                        <i class="mdi mdi-delete"></i>
+                                    <a href="{{ route('books.delete', $buku->id) }}" class="text-danger mx-1" onclick="cekHapus({{ $buku->id }}, '{{ $buku->judul }}', '{{ $buku->status }}')">
+                                        <i class="mdi mdi-delete mdi-24px"></i>
                                     </a>
                                 </div>
                             </td>

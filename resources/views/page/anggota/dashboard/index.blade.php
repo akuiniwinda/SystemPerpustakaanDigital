@@ -6,13 +6,28 @@
         <!-- Sambutan -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="p-3 bg-white rounded-3 shadow-sm border-start border-4 border-primary">
-                    <h3 class="fw-bold mb-1 text-dark">Selamat Datang, {{ $user->nama }}</h3>
-                    <p class="text-secondary mb-0">
-                        <i class="fas fa-book me-1 text-primary"></i>
-                        Selamat Datang di Sistem Perpustakaan Digital
-                        <span class="fw-semibold text-primary">SMKN 3 Banjar</span>
-                    </p>
+                <div class="p-4 rounded-4 shadow-lg border-0"
+                    style="background: #4b49ac;">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <div>
+                            <h3 class="fw-bold mb-1 text-white">
+                                <i class="fas fa-user-graduate me-2"></i>
+                                Selamat Datang, {{ $user->nama ?? 'Kepala Perpustakaan' }}
+                            </h3>
+                            <p class="mb-1 text-white-50">
+                                <i class="fas fa-book-open me-2"></i>
+                                Selamat Datang di Sistem Perpustakaan Digital
+                                <span class="fw-semibold text-warning">SMKN 3 Banjar</span>
+                            </p>
+                            <small class="text-white-50">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                {{ now()->format('l, d F Y') }}
+                            </small>
+                        </div>
+                        <div class="mt-2 mt-sm-0 text-white-50">
+                            <i class="fas fa-book fa-2x opacity-75"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

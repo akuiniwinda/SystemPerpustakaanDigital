@@ -7,6 +7,17 @@
       <p class="card-description">
         Tambah Data Buku
       </p>
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
       <form class="forms-sample" action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">

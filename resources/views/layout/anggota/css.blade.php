@@ -4,7 +4,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;   
+            align-items: center;
         }
 
         .profile-img {
@@ -13,7 +13,7 @@
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 10px;
-            display: block;        
+            display: block;
         }
 
         .role {
@@ -45,5 +45,9 @@
             -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        .sidebar {
+            background: #dae7ff;
         }
     </style>

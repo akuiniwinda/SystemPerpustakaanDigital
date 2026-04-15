@@ -52,7 +52,7 @@
     </tr>
     <tr>
         <td><strong>Buku Dipinjam</strong></td>
-        <td colspan="3">{{ $jumlahBukuDipinjam }} eksemplar</td>
+        <td colspan="3">{{ $jumlahBukuDipinjam }} buku</td>
     </tr>
 </table>
 

@@ -4,7 +4,7 @@
   <div class="card">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-            <h4 class="card-title mb-0">Tabel Buku</h4>
+            <h4 class="card-title mb-0">Tabel Anggota</h4>
             <div class="d-flex gap-2">
                 <form method="GET" action="{{ route('petugas.anggota.index') }}" id="searchForm">
                     <div class="input-group" style="width: 260px;">
@@ -21,6 +21,17 @@
                 </form>
             </div>
         </div>
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -50,10 +61,10 @@
 
               <td>
                 <a href="{{ route('petugas.anggota.show', $anggota->id) }}" class="text-info mx-1">
-                    <i class="mdi mdi-eye"></i>
+                    <i class="mdi mdi-eye mdi-24px"></i>
                 </a>
                 <a href="{{ route('petugas.anggota.delete', $anggota->id) }}" onclick="return confirm('Yakin?')" class="text-danger mx-1">
-                    <i class="mdi mdi-delete"></i>
+                    <i class="mdi mdi-delete mdi-24px"></i>
                 </a>
               </td>
             </tr>
