@@ -4,6 +4,7 @@ namespace App\Http\Controllers\KepalaPerpus;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\Pinjam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,6 +22,21 @@ class BukuController extends Controller
             ->paginate(5);
 
         return view('page.kepalaperpus.buku.index', compact('Books'));
+    }
+
+    // tampilan yang ada di soft delete
+    public function trash(Request $request){
+        $search = $request->input('search');
+
+        $Books = Book::onlyTrashed() // hanya yang sudah di soft delete
+            ->when($search, function ($query, $search) {
+                return $query->where('judul', 'like', '%' . $search . '%')
+                            ->orWhere('penulis', 'like', '%' . $search . '%');
+            })
+            ->orderBy('deleted_at', 'desc')
+            ->paginate(5);
+
+        return view('page.kepalaperpus.buku.trash', compact('Books'));
     }
 
     public function create(){
@@ -50,7 +66,7 @@ class BukuController extends Controller
             'tahun_terbit'   => $request->tahun_terbit,
             'deskripsi'      => $request->deskripsi,
             'stock'          => $request->stock,
-            'status'         => $status, // ✅ pakai hasil logic
+            'status'         => $status,
         ];
 
         // upload foto
@@ -63,15 +79,49 @@ class BukuController extends Controller
         return redirect()->route('books.index')->with('success', 'Data buku berhasil ditambahkan');
     }
 
+    // menghapus sementara
     public function destroy($id){
         $databuku = Book::find($id);
 
-        if ($databuku != null){
-            Storage::disk('public')->delete($databuku->foto);
-            $databuku->delete();
+        if ($databuku == null) {
+            return redirect()->route('books.index')->with('error', 'Data buku tidak ditemukan');
         }
 
-        return redirect()->route('books.index')->with('success', 'Data buku berhasil dihapuskan');
+        // Cek apakah buku sedang dipinjam
+        $sedangDipinjam = Pinjam::where('book_id', $id)
+                            ->where('status', 'meminjam')
+                            ->exists();
+
+        if ($sedangDipinjam) {
+            return redirect()->route('books.index')->with('error', 'Buku tidak dapat dihapus karena sedang dipinjam oleh anggota');
+        }
+
+        // SOFT DELETE (hanya mengisi deleted_at, FOTO TIDAK DIHAPUS)
+        $databuku->delete();
+
+        return redirect()->route('books.index')->with('success', 'Data buku berhasil dihapus sementara');
+    }
+
+    // mengembalikan buku yang ada di soft delete
+    public function restore($id){
+        $book = Book::withTrashed()->findOrFail($id);
+        $book->restore();
+
+        return redirect()->route('books.trash')->with('success', 'Buku berhasil dikembalikan');
+    }
+
+    // menghapus permanent
+    public function forceDelete($id){
+        $book = Book::withTrashed()->findOrFail($id);
+
+        // Hapus foto jika ada
+        if ($book->foto && Storage::disk('public')->exists($book->foto)) {
+            Storage::disk('public')->delete($book->foto);
+        }
+
+        $book->forceDelete();
+
+        return redirect()->route('books.trash')->with('success', 'Buku dihapus permanen dari database');
     }
 
     public function show($id){

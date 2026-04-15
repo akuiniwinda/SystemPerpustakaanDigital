@@ -32,10 +32,7 @@
         <!-- TANGGAL KEMBALI -->
         <div class="form-group">
             <label>Tanggal Pengembalian</label>
-            <h6>@if ($datapinjam->status != 'selesai') -
-                    @else
-                        {{ \Carbon\Carbon::parse($datapinjam->tanggal_pengembalian)->format('d-m-Y') }}
-                @endif</h6>
+             <h6>{{$datapinjam->tanggal_pengembalian}}</h6>
         </div>
 
         <!-- BUKU -->

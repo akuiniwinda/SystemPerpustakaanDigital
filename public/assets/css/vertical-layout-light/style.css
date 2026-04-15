@@ -19059,7 +19059,7 @@ a.text-dark:hover, a.text-dark:focus {
   .table, .jsgrid .jsgrid-table {
     border-collapse: collapse !important;
   }
-  
+
   .table td,
   .jsgrid .jsgrid-table td, .table th, .jsgrid .jsgrid-table th {
     background-color: #ffffff !important;
@@ -28562,10 +28562,17 @@ div.tagsinput span.tag a {
 }
 
 .sidebar .nav .nav-item .nav-link .menu-title {
-  color: inherit;
+  color: #4747a1;
   display: inline-block;
   font-size: 0.875rem;
   line-height: 1;
+  vertical-align: middle;
+}
+
+.sidebar .nav .nav-item .nav-link i.icon-nav {
+  color: #4747a1;
+  font-size: 1.3rem;
+  margin-right: 15px;
   vertical-align: middle;
 }
 

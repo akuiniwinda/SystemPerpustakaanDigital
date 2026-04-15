@@ -1,6 +1,6 @@
 @extends('layout.kepalaperpus.app')
 @section('content')
-            <div class="col-lg-10 grid-margin stretch-card">
+            <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
@@ -45,15 +45,15 @@
                             <td>
                                 <div>
                                     <a href="{{ route('petugas.edit', $petugas->id) }}" class="text-warning mx-1">
-                                        <i class="mdi mdi-tooltip-edit"></i>
+                                        <i class="mdi mdi-tooltip-edit mdi-24px"></i>
                                     </a>
 
                                     <a href="{{ route('petugas.show', $petugas->id) }}" class="text-info mx-1">
-                                        <i class="mdi mdi-eye"></i>
+                                        <i class="mdi mdi-eye mdi-24px"></i>
                                     </a>
 
                                     <a href="{{ route('petugas.delete', $petugas->id) }}" class="text-danger mx-1">
-                                        <i class="mdi mdi-delete"></i>
+                                        <i class="mdi mdi-delete mdi-24px"></i>
                                     </a>
                                 </div>
                             </td>

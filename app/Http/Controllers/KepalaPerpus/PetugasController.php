@@ -24,6 +24,20 @@ class PetugasController extends Controller
         return view('page.kepalaperpus.petugas.index', compact('Petugases'));
     }
 
+    public function trash(Request $request){
+        $search = $request->input('search');
+
+        $Petugases = Petugas::onlyTrashed() // Hanya yang sudah di soft delete
+            ->when($search, function ($query, $search) {
+                return $query->where('nama', 'like', '%' . $search . '%')
+                            ->orWhere('alamat', 'like', '%' . $search . '%');
+            })
+            ->orderBy('deleted_at', 'desc')
+            ->paginate(5);
+
+        return view('page.kepalaperpus.petugas.trash', compact('Petugases'));
+    }
+
     public function create(){
         return view('page.kepalaperpus.petugas.create');
     }
@@ -57,17 +71,38 @@ class PetugasController extends Controller
     }
 
     public function destroy($id){
-        $hpusdatapetugas = Petugas::find($id);
+        //cari data petugas yang blm terhapus
+        $hapusdatapetugas = Petugas::find($id);
 
-        if ($hpusdatapetugas != null){
-            if ($hpusdatapetugas->foto) {
-                Storage::disk('public')->delete($hpusdatapetugas->foto);
-            }
-
-            $hpusdatapetugas->delete();
+        //cek apakah data ditemukan
+        if (!$hapusdatapetugas) {
+            return redirect()->route('petugas.index')->with('error', 'Data petugas tidak ditemukan');
         }
 
-        return redirect()->route('petugas.index')->with('success', 'Data berhasil dihapus');
+        //Lakukan SOFT DELETE
+        $hapusdatapetugas->delete();
+
+        return redirect()->route('petugas.index')->with('success', 'Data petugas berhasil dihapus sementara');
+    }
+
+    public function restore($id){
+        $petugas = Petugas::withTrashed()->findOrFail($id);
+        $petugas->restore();
+
+        return redirect()->route('petugas.trash')->with('success', 'Petugas berhasil dikembalikan');
+    }
+
+    public function forceDelete($id){
+        $petugas = Petugas::withTrashed()->findOrFail($id);
+
+        // Hapus foto jika ada
+        if ($petugas->foto && Storage::disk('public')->exists($petugas->foto)) {
+            Storage::disk('public')->delete($petugas->foto);
+        }
+
+        $petugas->forceDelete();
+
+        return redirect()->route('petugas.trash')->with('success', 'Petugas dihapus permanen dari database');
     }
 
     public function show($id){

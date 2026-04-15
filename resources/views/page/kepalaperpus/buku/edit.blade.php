@@ -5,12 +5,22 @@
     <div class="card-body">
       <h4 class="card-title">Form Buku</h4>
       <p class="card-description">
-        Tambah Data Buku
+        Tambah Edit Buku
       </p>
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
       <form class="forms-sample" action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-
         <div class="form-group">
             <label>Stock</label>
             <input type="number" name="stock" class="form-control" value="{{ $book->stock }}" min="1">

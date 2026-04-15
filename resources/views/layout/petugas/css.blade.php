@@ -18,7 +18,7 @@
 
         .role {
             display: inline-block;
-            background: #e7c87b;
+            background: #D3D2FF;
             color: white;
             padding: 5px 15px;
             border-radius: 20px;
@@ -30,5 +30,9 @@
             font-size: 15px;
             font-weight: 600;
             margin-top: 0;
+        }
+
+        .sidebar {
+            background: #dae7ff;
         }
     </style>

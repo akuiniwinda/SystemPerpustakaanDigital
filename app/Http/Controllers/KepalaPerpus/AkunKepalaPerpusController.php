@@ -36,6 +36,6 @@ class AkunKepalaPerpusController extends Controller
 
         User::create($datakepalaperpus_store);
 
-        return redirect()->route('kepalaperpus.dashboard.index')->with('success', 'Akun Kepala Perpustakaan berhasil ditambahkan');
+        return redirect()->route('dashboard.index')->with('success', 'Akun Kepala Perpustakaan berhasil ditambahkan');
     }
 }

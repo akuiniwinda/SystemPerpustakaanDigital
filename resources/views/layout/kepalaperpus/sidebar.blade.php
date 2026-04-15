@@ -15,25 +15,29 @@
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('dashboard.index') }}">
-                <span class="menu-title">Dashboard</span>
+                    <i class="mdi mdi-border-all icon-nav"></i>
+                    <span class="menu-title">Dashboard</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('petugas.index') }}">
-                <span class="menu-title">Data Petugas</span>
+                    <i class="mdi mdi-account-multiple icon-nav"></i>
+                    <span class="menu-title">Data Petugas</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('books.index') }}">
-                <span class="menu-title">Data Buku</span>
+                    <i class="mdi mdi-book-open-page-variant icon-nav"></i>
+                    <span class="menu-title">Data Buku</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('laporan.index') }}">
-                <span class="menu-title">Laporan</span>
+                    <i class="mdi mdi-file-multiple icon-nav"></i>
+                    <span class="menu-title">Laporan</span>
                 </a>
             </li>
         </ul>

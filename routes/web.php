@@ -41,7 +41,13 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('kepalaperpus')
         ->middleware('cekRole:kepalaperpus')
         ->group(function () {
+        Route::get('books/trash', [BukuController::class, 'trash'])->name('books.trash');
+        Route::post('books/{id}/restore', [BukuController::class, 'restore'])->name('books.restore');
+        Route::delete('books/{id}/force', [BukuController::class, 'forceDelete'])->name('books.force-delete');
         Route::get('books/hapus/{id}', [BukuController::class, 'destroy'])->name('books.delete');
+        Route::get('petugas/trash', [PetugasController::class, 'trash'])->name('petugas.trash');
+        Route::post('petugas/{id}/restore', [PetugasController::class, 'restore'])->name('petugas.restore');
+        Route::delete('petugas/{id}/force', [PetugasController::class, 'forceDelete'])->name('petugas.force-delete');
         Route::get('petugas/hapus/{id}', [PetugasController::class, 'destroy'])->name('petugas.delete');
         Route::resource('petugas', PetugasController::class);
         Route::resource('dashboard', DashboardKepalaPerpusController::class);
@@ -92,3 +98,5 @@ use Illuminate\Support\Facades\Route;
 
     //logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::get('/', function () {return view('welcome');});

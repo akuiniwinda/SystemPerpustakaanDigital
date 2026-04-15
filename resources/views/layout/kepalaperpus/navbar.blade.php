@@ -27,6 +27,14 @@
                 <i class="mdi mdi-account-plus text-primary"></i>
                 Tambah Akun
               </a>
+              <a class="dropdown-item" href="{{ route('books.trash') }}">
+                <i class="mdi mdi-book-minus text-primary"></i>
+                Buku Terhapus
+              </a>
+              <a class="dropdown-item" href="{{ route('petugas.trash') }}" >
+                <i class="mdi mdi-account-remove text-primary"></i>
+                Petugas Terhapus
+              </a>
             </div>
           </li>
           <li class="nav-item nav-settings d-none d-lg-flex">

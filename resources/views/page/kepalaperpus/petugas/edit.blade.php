@@ -7,12 +7,16 @@
       <p class="card-description">
         Edit Data Buku
       </p>
-      @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-            <p>{{ $error }}</p>
-            @endforeach
-        </div>
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
         @endif
       <form class="forms-sample" action="{{ route('petugas.update', $Petugases->id) }}" method="POST" enctype="multipart/form-data">
         @csrf

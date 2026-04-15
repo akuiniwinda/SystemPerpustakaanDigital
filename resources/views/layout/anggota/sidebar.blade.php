@@ -18,24 +18,28 @@
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link" href="{{ route('anggota.dashboard.index') }}">
+                <i class="mdi mdi-border-all icon-nav"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('anggota.buku.index') }}">
+                <i class="mdi mdi-book-open-page-variant icon-nav"></i>
                 <span class="menu-title">Buku</span>
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('anggota.profile.index') }}">
+                <i class="mdi mdi-account icon-nav"></i>
                 <span class="menu-title">Profile</span>
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('anggota.riwayat.index') }}">
+                <i class="mdi mdi-bookmark icon-nav"></i>
                 <span class="menu-title">Riwayat</span>
             </a>
         </li>
