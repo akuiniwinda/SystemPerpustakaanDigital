@@ -412,7 +412,7 @@
 
               <!-- Judul -->
               <h1 class="welcome-title">PERPUSTAKAAN DIGITAL</h1>
-              <p class="welcome-subtitle">Selamat datang di platform perpustakaan digital modern. Temukan ribuan koleksi buku dan bahan bacaan berkualitas.</p>
+              <p class="welcome-subtitle">Selamat datang di platform perpustakaan digital SMK Negeri 3 Banjar.</p>
 
               <!-- Tombol Pilihan -->
               <div class="choice-buttons">

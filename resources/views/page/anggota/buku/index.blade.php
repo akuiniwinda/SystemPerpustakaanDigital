@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container mt-4">
-
+    @php
+        $user = session('user');
+    @endphp
     <!-- SEARCH -->
     <div class="row mb-4">
         <div class="col-md-6 mx-auto">
@@ -36,6 +38,7 @@
                         </a>
                     </h6>
                     <small class="text-muted text-truncate d-block">{{ $buku->penulis }}</small>
+                    <small class="text-muted text-truncate d-block">Stok:{{ $buku->stock }}</small>
                 </div>
 
                 <div class="mt-2">
@@ -44,7 +47,15 @@
                     @elseif($sedangMeminjam)
                         <button class="btn btn-info btn-sm" disabled>Dipinjam</button>
                     @else
-                        <a href="{{ route('anggota.pinjam.create', $buku->id) }}" class="btn btn-warning btn-sm text-white">Pinjam</a>
+                        <form action="{{ route('anggota.pinjam', $buku->id) }}" method="POST">
+                            @csrf
+                            <input type="hidden" value="{{ $user->nama }}">
+                            <input type="hidden" value="{{ $buku->stock }}">
+                            <input type="hidden" value="{{ \Carbon\Carbon::now()->format('d-m-Y') }}">
+                            <input type="hidden" value="{{ \Carbon\Carbon::now()->addDays(1)->format('d-m-Y') }}">
+                            <input type="hidden" value="{{ $buku->judul }}">
+                            <button type="submit" class="btn btn-warning btn-sm text-white">Pinjam</button>
+                        </form>
                     @endif
                 </div>
             </div>
