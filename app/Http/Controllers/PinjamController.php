@@ -53,6 +53,7 @@ class PinjamController extends Controller
     }
 
     // Anggota mengajukan pengembalian
+// Anggota mengajukan pengembalian
     public function ajukanKembali($id) {
         $pinjam = Pinjam::findOrFail($id);
         if ($pinjam->status != 'meminjam') {
@@ -62,23 +63,10 @@ class PinjamController extends Controller
             return back()->with('error', 'Pengajuan sudah ada, menunggu petugas.');
         }
 
-        // Gunakan tanggal murni (tanpa jam)
-        $today = \Carbon\Carbon::today(); // tanggal sekarang pukul 00:00:00
-        $batas = \Carbon\Carbon::parse($pinjam->tanggal_pengembalian)->startOfDay();
-
-        $denda = 0;
-        if ($today->gt($batas)) {
-            $hari_telat = $today->diffInDays($batas); // selisih hari positif
-            $denda = max(0, $hari_telat * 5000);
-        }
-
-        if ($denda < 0) {
-            $denda = 0;
-        }
-
+        // HANYA set pengajuan, TIDAK hitung denda
         $pinjam->update([
             'pengajuan_pengembalian' => true,
-            'denda_pengajuan' => $denda,
+            // HAPUS perhitungan denda di sini!
         ]);
 
         return back()->with('success', 'Pengajuan pengembalian dikirim. Menunggu konfirmasi petugas.');

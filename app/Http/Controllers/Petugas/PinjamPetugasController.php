@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Petugas;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Pinjam;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PinjamPetugasController extends Controller
@@ -99,20 +100,29 @@ class PinjamPetugasController extends Controller
             return back()->with('error', 'Tidak ada pengajuan pengembalian yang valid.');
         }
 
-        $dendaFinal = max(0, $pinjam->denda_pengajuan);
+        // HITUNG DENDA berdasarkan tanggal real kembali
+        $tanggal_kembali_real = Carbon::now(); // atau dari request jika petugas input manual
+        $rencana_kembali = Carbon::parse($pinjam->tanggal_pengembalian);
+
+        $denda = 0;
+        if ($tanggal_kembali_real->gt($rencana_kembali)) {
+            $hari_telat = $tanggal_kembali_real->diffInDays($rencana_kembali);
+            $denda = $hari_telat * 5000;
+        }
+
         $pinjam->update([
             'status' => 'selesai',
-            'tanggal_kembali' => now(),
-            'denda' => $dendaFinal,
+            'tanggal_kembali' => $tanggal_kembali_real,
+            'denda' => $denda,
             'pengajuan_pengembalian' => false,
-            'status_denda' => $dendaFinal > 0 ? 'belum' : 'lunas',
+            'status_denda' => $denda > 0 ? 'belum' : 'lunas',
         ]);
 
         $buku = Book::find($pinjam->book_id);
         $buku->increment('stock');
         $buku->update(['status' => 'tersedia']);
 
-        return redirect()->route('petugas.pinjam.index')->with('success', 'Pengembalian disetujui. Denda: Rp ' . number_format($pinjam->denda_pengajuan, 0, ',', '.'));
+        return redirect()->route('petugas.pinjam.index')->with('success', 'Pengembalian disetujui. Denda: Rp ' . number_format($denda, 0, ',', '.'));
     }
 
     // Daftar pengajuan denda
