@@ -73,8 +73,7 @@ class PinjamController extends Controller
     }
 
     // Halaman daftar denda yang belum lunas
-    public function daftarDenda()
-    {
+    public function daftarDenda(){
         $user = session('user');
         $dendas = Pinjam::with('buku')
                     ->where('anggota_id', $user->id)
@@ -84,7 +83,6 @@ class PinjamController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-        // Total besar denda untuk card
         $besarDenda = $dendas->sum('denda');
 
         return view('page.anggota.denda.index', compact('dendas', 'besarDenda'));

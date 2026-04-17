@@ -47,6 +47,7 @@
               <th>Rencana Kembali</th>
               <th>Tanggal Kembali</th>
               <th>Denda</th>
+              <th>Kondisi Buku</th>
               <th>Status</th>
               <th>Proses Pinjam</th>
               <th>Proses Kembali</th>
@@ -59,12 +60,23 @@
                 <td>{{ $pinjam->buku->judul }}</td>
                 <td>{{ \Carbon\Carbon::parse($pinjam->tanggal_pinjam)->format('d-m-Y') }}</td>
                 <td>{{ \Carbon\Carbon::parse($pinjam->tanggal_pengembalian)->format('d-m-Y') }}</td>
-                <td>{{ $pinjam->tanggal_kembali }}</td>
+                <td>{{ $pinjam->tanggal_kembali ? \Carbon\Carbon::parse($pinjam->tanggal_kembali)->format('d-m-Y') : '-' }}</td>
                 <td>
                     @if ($pinjam->denda > 0)
-                        <span class="text-danger">Rp {{ number_format($pinjam->denda) }}</span>
+                        <span class="text-danger">{{ $pinjam->denda }}</span>
                     @else
-                        -
+                        0
+                    @endif
+                </td>
+                <td>
+                    @if($pinjam->kondisi_buku == 'baik')
+                        <span class="badge bg-success">Baik</span>
+                    @elseif($pinjam->kondisi_buku == 'rusak')
+                        <span class="badge bg-warning text-dark">Rusak</span>
+                    @elseif($pinjam->kondisi_buku == 'hilang')
+                        <span class="badge bg-danger">Hilang</span>
+                    @else
+                        <span class="badge bg-secondary">-</span>
                     @endif
                 </td>
                 <td>
@@ -97,20 +109,27 @@
                         <span class="text-muted">-</span>
                     @endif
                 </td>
-                <td class="text-center">
+                <td>
                     @if($pinjam->status == 'meminjam')
-                        @if($pinjam->pengajuan_pengembalian)
-                            <form action="{{ route('petugas.kembali', $pinjam->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-success">
-                                    <i class="fas fa-undo-alt"></i> Konfirmasi Kembali
-                                </button>
-                            </form>
-                        @else
-                            <span class="badge bg-warning text-dark">Menunggu pengajuan</span>
-                        @endif
+                    <form action="{{ route('petugas.kembali', $pinjam->id) }}" method="POST"
+                        style="display: flex; gap: 8px; align-items: center; justify-content: center;">
+                        @csrf
+                        <input type="date" name="tanggal_kembali" class="form-control form-control-sm"
+                            value="{{ date('Y-m-d') }}" required style="width: 130px;">
+
+                        <select name="kondisi_buku" class="form-control form-control-sm" required style="width: 155px;">
+                            <option value="">Pilih Kondisi</option>
+                            <option value="baik">✅ Baik</option>
+                            <option value="rusak">⚠️ Rusak (+30000)</option>
+                            <option value="hilang">❌ Hilang (55000)</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="fas fa-check"></i> Proses
+                        </button>
+                    </form>
                     @elseif($pinjam->status == 'selesai')
-                        <span class="badge bg-success">Selesai</span>
+                        <span class="badge bg-success">Selesai</span>  <!-- ✅ INI YANG MUNCUL -->
                     @else
                         <span class="text-muted">-</span>
                     @endif
@@ -138,4 +157,37 @@
     </div>
   </div>
 </div>
+
+<script>
+function confirmKonfirmasi(form) {
+    let tanggal = form.querySelector('input[name="tanggal_kembali"]').value;
+    let kondisi = form.querySelector('select[name="kondisi_buku"]').value;
+    let rencanaKembali = "{{ $pinjam->tanggal_pengembalian ?? '' }}";
+
+    if (!tanggal) {
+        alert('Pilih tanggal kembali!');
+        return false;
+    }
+
+    if (!kondisi) {
+        alert('Pilih kondisi buku terlebih dahulu!');
+        return false;
+    }
+
+    let pesan = '⚠️ KONFIRMASI PENGEMBALIAN ⚠️\n\n';
+    pesan += 'Tanggal Kembali: ' + tanggal + '\n';
+
+    if (kondisi === 'baik') {
+        pesan += 'Kondisi: BAIK (Tidak ada denda kerusakan)\n\n';
+    } else if (kondisi === 'rusak') {
+        pesan += 'Kondisi: RUSAK (Denda Rp 30.000)\n\n';
+    } else if (kondisi === 'hilang') {
+        pesan += 'Kondisi: HILANG (Denda Rp 55.000)\n\n';
+    }
+
+    pesan += 'Apakah data sudah sesuai dengan pengecekan fisik buku?';
+
+    return confirm(pesan);
+}
+</script>
 @endsection

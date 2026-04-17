@@ -21,26 +21,54 @@
                         <div class="alert alert-info">Tidak ada denda yang perlu diajukan.</div>
                     @else
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Judul Buku</th>
                                         <th>Tanggal Pinjam</th>
+                                        <th>Rencana Kembali</th>
                                         <th>Tanggal Kembali</th>
                                         <th>Denda (Rp)</th>
+                                        <th>Alasan Denda</th>
                                         <th>Status Denda</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($dendas as $index => $d)
+                                     @php
+                                        // Hitung keterlambatan
+                                        $rencana = \Carbon\Carbon::parse($d->tanggal_pengembalian);
+                                        $kembali = \Carbon\Carbon::parse($d->tanggal_kembali);
+                                        $telat = 0;
+                                        $alasan = [];
+
+                                        if ($kembali->gt($rencana)) {
+                                            $telat = $kembali->diffInDays($rencana);
+                                            $alasan[] = "Telat {$telat} hari (Rp " . number_format($telat * 5000) . ")";
+                                        }
+
+                                        if ($d->kondisi_buku == 'rusak') {
+                                            $alasan[] = "Buku rusak (Denda Rp 30.000)";
+                                        } elseif ($d->kondisi_buku == 'hilang') {
+                                            $alasan[] = "Buku hilang (Denda Rp 55.000)";
+                                        }
+
+                                        $alasanText = !empty($alasan) ? implode(' + ', $alasan) : '-';
+                                     @endphp
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $d->buku->judul }}</td>
                                         <td>{{ \Carbon\Carbon::parse($d->tanggal_pinjam)->format('d/m/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($d->tanggal_pengembalian)->format('d/m/Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($d->tanggal_kembali)->format('d/m/Y') }}</td>
                                         <td>Rp {{ number_format($d->denda, 0, ',', '.') }}</td>
+                                        <td>
+                                            <small class="text-danger">
+                                                {{ $alasanText }}
+                                            </small>
+                                        </td>
                                         <td>
                                             @if($d->status_denda == 'belum')
                                                 <span class="badge badge-danger">Belum dibayar</span>
@@ -66,6 +94,11 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- total denda -->
+                        <div class="alert alert-info mt-3">
+                            <strong>Total Denda yang Harus Dibayar: Rp {{ number_format($besarDenda, 0, ',', '.') }}</strong>
                         </div>
                     @endif
                 </div>

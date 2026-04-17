@@ -93,36 +93,59 @@ class PinjamPetugasController extends Controller
         return view('page.petugas.pengajuan_kembali', compact('pengajuan'));
     }
 
-    // Petugas konfirmasi pengembalian
-    public function konfirmasiKembali($id){
+    public function konfirmasiKembali(Request $request, $id){
         $pinjam = Pinjam::findOrFail($id);
+
         if (!$pinjam->pengajuan_pengembalian || $pinjam->status != 'meminjam') {
             return back()->with('error', 'Tidak ada pengajuan pengembalian yang valid.');
         }
 
-        // HITUNG DENDA berdasarkan tanggal real kembali
-        $tanggal_kembali_real = Carbon::now(); // atau dari request jika petugas input manual
+        // VALIDASI - TAMBAHKAN tanggal_kembali
+        $request->validate([
+            'kondisi_buku' => 'required|in:baik,rusak,hilang',
+            'tanggal_kembali' => 'required|date', // TAMBAHKAN INI
+        ]);
+
+        // PAKAI TANGGAL DARI REQUEST, BUKAN Carbon::now()!!!
+        $tanggal_kembali_real = Carbon::parse($request->tanggal_kembali);
         $rencana_kembali = Carbon::parse($pinjam->tanggal_pengembalian);
 
         $denda = 0;
+
+        // Denda telat
         if ($tanggal_kembali_real->gt($rencana_kembali)) {
             $hari_telat = $tanggal_kembali_real->diffInDays($rencana_kembali);
             $denda = $hari_telat * 5000;
         }
 
+        // Denda kondisi
+        if ($request->kondisi_buku == 'rusak') {
+            $denda += 30000;
+        }
+        if ($request->kondisi_buku == 'hilang') {
+            $denda = 55000;
+        }
+
+        // UPDATE - PAKAI TANGGAL DARI REQUEST
         $pinjam->update([
             'status' => 'selesai',
-            'tanggal_kembali' => $tanggal_kembali_real,
+            'tanggal_kembali' => $request->tanggal_kembali, // LANGSUNG DARI REQUEST
             'denda' => $denda,
             'pengajuan_pengembalian' => false,
             'status_denda' => $denda > 0 ? 'belum' : 'lunas',
+            'kondisi_buku' => $request->kondisi_buku,
         ]);
 
         $buku = Book::find($pinjam->book_id);
-        $buku->increment('stock');
-        $buku->update(['status' => 'tersedia']);
+        if ($request->kondisi_buku != 'hilang') {
+            $buku->increment('stock');
+        }
+        $buku->update(['status' => $buku->stock > 0 ? 'tersedia' : 'habis']);
 
-        return redirect()->route('petugas.pinjam.index')->with('success', 'Pengembalian disetujui. Denda: Rp ' . number_format($denda, 0, ',', '.'));
+        return redirect()->route('petugas.pinjam.index')->with('success',
+            'Pengembalian berhasil! Tanggal: ' . $request->tanggal_kembali .
+            ', Denda: ' . $denda
+        );
     }
 
     // Daftar pengajuan denda
